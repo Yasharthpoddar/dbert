@@ -1,0 +1,2806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% set page_title = "Internship Stipend Milestone" %}
+{% set page_robots = "noindex, nofollow" %}
+{% include "_head.html" %}
+
+<style nonce="{{ csp_nonce() }}">
+  /* ==========================================================================
+     DBERT LMS — STIPEND MILESTONE & TECHNICAL CONTRIBUTION STYLING
+     Self-contained, CSP Nonce Enforced (Zero CDN dependencies)
+     ========================================================================== */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  .stipend-container {
+    max-width: 1120px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 3.5rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  /* 1. Header Hero Banner */
+  .stipend-hero {
+    background: linear-gradient(135deg, #0A0D17 0%, #161D33 50%, #0F172A 100%);
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    border-radius: 20px;
+    padding: 2.25rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.75rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 25px rgba(99, 102, 241, 0.12);
+  }
+
+  .stipend-hero::after {
+    content: '';
+    position: absolute;
+    top: -70px;
+    right: -70px;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    color: #A5B4FC;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
+    font-weight: 850;
+    color: #FFFFFF;
+    letter-spacing: -0.5px;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-desc {
+    font-size: 0.9375rem;
+    color: #94A3B8;
+    max-width: 620px;
+    line-height: 1.6;
+  }
+
+  .hero-desc strong {
+    color: #34D399;
+  }
+
+  .bounty-card {
+    background: rgba(14, 19, 31, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 1.35rem 1.65rem;
+    border-radius: 16px;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    flex-shrink: 0;
+  }
+
+  .bounty-label {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94A3B8;
+    font-weight: 700;
+  }
+
+  .bounty-amount {
+    font-size: 1.95rem;
+    font-weight: 900;
+    color: #10B981;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.25rem 0;
+    letter-spacing: -0.5px;
+  }
+
+  .bounty-amount i {
+    color: #F59E0B;
+  }
+
+  .bounty-sub {
+    font-size: 0.75rem;
+    color: #64748B;
+  }
+
+  /* 2. Checklist Section */
+  .section-title {
+    font-size: 0.875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #CBD5E1;
+    margin-bottom: 1.15rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .section-title i {
+    color: #818CF8;
+  }
+
+  .checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .gate-card {
+    background: #0E131F;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.45rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .gate-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  .gate-card-passed {
+    border-color: rgba(16, 185, 129, 0.4);
+  }
+
+  .gate-card-warning {
+    border-color: rgba(245, 158, 11, 0.4);
+  }
+
+  .gate-card-info {
+    border-color: rgba(56, 189, 248, 0.4);
+  }
+
+  .gate-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .gate-icon-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+
+  .icon-passed {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34D399;
+  }
+
+  .icon-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: #FBBF24;
+  }
+
+  .icon-info {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38BDF8;
+  }
+
+  .icon-purple {
+    background: rgba(168, 85, 247, 0.15);
+    color: #C084FC;
+  }
+
+  .icon-linkedin {
+    background: rgba(10, 102, 194, 0.2);
+    color: #38BDF8;
+  }
+
+  .gate-status-pill {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.25rem 0.7rem;
+    border-radius: 9999px;
+  }
+
+  .status-passed {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34D399;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+  }
+
+  .status-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: #FBBF24;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+  }
+
+  .status-info {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38BDF8;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+  }
+
+  .gate-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 0.35rem;
+  }
+
+  .gate-text {
+    font-size: 0.8125rem;
+    color: #94A3B8;
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  .gate-text code, .gate-text strong {
+    color: #F1F5F9;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.8125rem;
+  }
+
+  .gate-footer {
+    margin-top: 1.15rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .gate-link {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: opacity 0.15s ease;
+  }
+
+  .gate-link-gold {
+    color: #FBBF24;
+  }
+
+  .gate-link-gold:hover {
+    color: #FDE68A;
+    text-decoration: underline;
+  }
+
+  .gate-link-purple {
+    color: #C084FC;
+  }
+
+  .gate-link-purple:hover {
+    color: #E9D5FF;
+    text-decoration: underline;
+  }
+
+  /* High-Impact 3D Glowing CTA Buttons */
+  .stipend-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 11px 22px;
+    min-height: 44px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 850;
+    letter-spacing: 0.3px;
+    text-decoration: none !important;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid transparent;
+    margin: 3px 2px;
+  }
+  .stipend-cta-btn:hover {
+    transform: translateY(-2px);
+  }
+  .stipend-cta-btn:active {
+    transform: translateY(0);
+  }
+  .stipend-cta-emerald {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    border-color: #34D399;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.45);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  .stipend-cta-emerald:hover {
+    box-shadow: 0 6px 22px rgba(16, 185, 129, 0.6);
+  }
+  .stipend-cta-gold {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    border-color: #FCD34D;
+    color: #0F172A !important;
+    box-shadow: 0 4px 18px rgba(245, 158, 11, 0.5);
+    font-weight: 900;
+  }
+  .stipend-cta-gold:hover {
+    box-shadow: 0 6px 24px rgba(245, 158, 11, 0.65);
+  }
+  .stipend-cta-blue {
+    background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+    border-color: #38BDF8;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 16px rgba(2, 132, 199, 0.45);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  .stipend-cta-blue:hover {
+    box-shadow: 0 6px 22px rgba(2, 132, 199, 0.6);
+  }
+  .stipend-cta-linkedin {
+    background: linear-gradient(135deg, #0A66C2 0%, #0077B5 100%);
+    border-color: #60A5FA;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 16px rgba(10, 102, 194, 0.45);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  .stipend-cta-linkedin:hover {
+    box-shadow: 0 6px 22px rgba(10, 102, 194, 0.6);
+  }
+  .stipend-cta-dark {
+    background: #1E293B;
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #E2E8F0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  .stipend-cta-dark:hover {
+    background: #334155;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  .stipend-btn-sm {
+    padding: 7px 15px;
+    font-size: 12px;
+    border-radius: 8px;
+    font-weight: 750;
+  }
+
+  /* 3. System Guidance Notice */
+  .system-notice {
+    background: rgba(120, 53, 15, 0.25);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: 14px;
+    padding: 1.15rem 1.35rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .system-notice i {
+    color: #FBBF24;
+    font-size: 1.25rem;
+    margin-top: 0.15rem;
+  }
+
+  .notice-title {
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: #FEF3C7;
+    margin-bottom: 0.25rem;
+  }
+
+  .notice-body {
+    font-size: 0.75rem;
+    color: #FDE68A;
+    line-height: 1.5;
+  }
+
+  /* 4. Submission & Tracking Cards */
+  .form-card {
+    background: #0E131F;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 2rem 2.25rem;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+    margin-bottom: 2rem;
+  }
+
+  .form-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .step-eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #818CF8;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .form-title {
+    font-size: 1.5rem;
+    font-weight: 850;
+    color: #FFFFFF;
+    margin: 0.2rem 0;
+    letter-spacing: -0.3px;
+  }
+
+  .form-sub {
+    font-size: 0.8125rem;
+    color: #94A3B8;
+  }
+
+  .form-group {
+    margin-bottom: 1.4rem;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #E2E8F0;
+    margin-bottom: 0.45rem;
+  }
+
+  .form-label span.req {
+    color: #F43F5E;
+  }
+
+  .form-label span.opt {
+    color: #64748B;
+    font-weight: 500;
+  }
+
+  .input-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-icon-wrap i {
+    position: absolute;
+    left: 1rem;
+    color: #64748B;
+    font-size: 0.95rem;
+    pointer-events: none;
+  }
+
+  .form-input {
+    width: 100%;
+    background: #07090E;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 0.75rem 1rem 0.75rem 2.65rem;
+    color: #FFFFFF;
+    font-size: 0.875rem;
+    font-family: inherit;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #6366F1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  }
+
+  .form-textarea {
+    width: 100%;
+    background: #07090E;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    color: #FFFFFF;
+    font-size: 0.875rem;
+    font-family: inherit;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 110px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .form-textarea:focus {
+    outline: none;
+    border-color: #6366F1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  }
+
+  .file-input {
+    width: 100%;
+    font-size: 0.8125rem;
+    color: #94A3B8;
+  }
+
+  .file-input::file-selector-button {
+    background: #1E293B;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #F8FAFC;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-right: 1rem;
+    transition: background 0.15s ease;
+  }
+
+  .file-input::file-selector-button:hover {
+    background: #334155;
+  }
+
+  .form-help {
+    font-size: 0.6875rem;
+    color: #64748B;
+    margin-top: 0.35rem;
+  }
+
+  .form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .form-guarantee {
+    font-size: 0.75rem;
+    color: #94A3B8;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .form-guarantee i {
+    color: #10B981;
+  }
+
+  .btn-submit-stipend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.75rem 1.65rem;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #4F46E5 0%, #6366F1 50%, #4338CA 100%);
+    color: #FFFFFF;
+    font-size: 0.875rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+  }
+
+  .btn-submit-stipend:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+    background: linear-gradient(135deg, #6366F1 0%, #818CF8 50%, #4F46E5 100%);
+  }
+
+  .btn-submit-stipend:active {
+    transform: translateY(1px);
+  }
+
+  /* 5. Review Timeline Visualizer */
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+    gap: 1.25rem;
+    margin: 1.75rem 0;
+    box-sizing: border-box;
+  }
+  @media (min-width: 961px) {
+    .timeline-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  .timeline-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .step-num-bubble {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .bubble-done {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34D399;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+  }
+
+  .bubble-active {
+    background: rgba(245, 158, 11, 0.15);
+    color: #FBBF24;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+  }
+
+  .bubble-pending {
+    background: #1E293B;
+    color: #64748B;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .step-info-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #FFFFFF;
+  }
+
+  .step-info-sub {
+    font-size: 0.6875rem;
+    color: #94A3B8;
+    margin-top: 0.15rem;
+  }
+
+  .rubric-box {
+    margin-top: 1.5rem;
+    background: rgba(7, 9, 14, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1.15rem 1.35rem;
+  }
+
+  .rubric-label {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #818CF8;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .rubric-content {
+    font-size: 0.8125rem;
+    color: #CBD5E1;
+    line-height: 1.6;
+  }
+
+  .reward-callout {
+    margin-top: 1.5rem;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .reward-callout-left {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .reward-callout-icon {
+    font-size: 1.65rem;
+    color: #34D399;
+  }
+
+  .reward-title {
+    font-size: 0.9375rem;
+    font-weight: 800;
+    color: #D1FAE5;
+  }
+
+  .reward-sub {
+    font-size: 0.75rem;
+    color: #A7F3D0;
+  }
+
+  .btn-payout-claim {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.35rem;
+    border-radius: 10px;
+    background: #10B981;
+    color: #022C22;
+    font-size: 0.8125rem;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    transition: background 0.15s ease;
+  }
+
+  .btn-payout-claim:hover {
+    background: #34D399;
+  }
+
+  /* 6. Locked State Experience */
+  .locked-card {
+    background: rgba(14, 19, 31, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    max-width: 680px;
+    margin: 1rem auto 3rem;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .locked-icon-bubble {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #FBBF24;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.65rem;
+    margin: 0 auto 1.15rem;
+  }
+
+  .locked-title {
+    font-size: 1.35rem;
+    font-weight: 850;
+    color: #FFFFFF;
+    margin-bottom: 0.5rem;
+  }
+
+  .locked-desc {
+    font-size: 0.875rem;
+    color: #94A3B8;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .locked-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-verify-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.45rem;
+    border-radius: 10px;
+    background: #F59E0B;
+    color: #000000;
+    font-size: 0.8125rem;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
+  }
+
+  .btn-verify-cta:hover {
+    background: #FBBF24;
+  }
+
+  .btn-upi-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.45rem;
+    border-radius: 10px;
+    background: #9333EA;
+    color: #FFFFFF;
+    font-size: 0.8125rem;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(147, 51, 234, 0.25);
+  }
+
+  .btn-upi-cta:hover {
+    background: #A855F7;
+  }
+
+  /* High-Contrast Action Buttons for Gates 3 & 4 */
+  #btnSaveStipendUpi:hover {
+    background: linear-gradient(135deg, #34D399 0%, #10B981 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.55) !important;
+  }
+  #btnToggleStipendUpi:hover {
+    background: rgba(212, 175, 55, 0.25) !important;
+    color: #FDE68A !important;
+    border-color: #FBBF24 !important;
+    transform: translateY(-1px);
+  }
+  .btn-linkedin-add-cert:hover {
+    background: linear-gradient(135deg, #0284C7 0%, #0A66C2 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(10, 102, 194, 0.55) !important;
+  }
+  #btnOpenSnippetModal:hover {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.45) !important;
+  }
+  #btnSaveLinkedin:hover {
+    background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(2, 132, 199, 0.55) !important;
+  }
+  #btnShowUpdateLinkedin:hover {
+    background: rgba(99, 102, 241, 0.32) !important;
+    border-color: #818CF8 !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35) !important;
+  }
+  #btnCheckLinkedinNow:hover {
+    background: rgba(56, 189, 248, 0.25) !important;
+    border-color: #38BDF8 !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.35) !important;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 860px) {
+    .stipend-hero {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1.5rem;
+    }
+    .bounty-card {
+      width: 100%;
+    }
+    .timeline-grid {
+      grid-template-columns: 1fr;
+      gap: 1.15rem;
+    }
+    .form-card {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .form-input,
+    .form-textarea,
+    #stipendUpiInput,
+    #stipendLinkedinInput {
+      font-size: 16px !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .stipend-container {
+      padding: 1rem 0.5rem 3rem;
+    }
+    .hero-title {
+      font-size: 1.4rem;
+    }
+    .checklist-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .gate-card {
+      padding: 1.15rem;
+    }
+    .stipend-hero {
+      padding: 1.25rem 1rem;
+    }
+    .bounty-card {
+      padding: 1.15rem;
+    }
+    .bounty-amount {
+      font-size: 1.65rem;
+    }
+    .form-card {
+      padding: 1.25rem 1rem;
+    }
+    .btn-submit-task,
+    .btn-submit-stipend,
+    .btn-upi-cta,
+    .btn-verify-cta,
+    .btn-payout-claim {
+      width: 100%;
+      min-height: 44px;
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+  /* Universal Sidebar-Aware Modal Backdrops */
+  .portal-modal-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+  @media (min-width: 769px) {
+    body.has-sidebar .portal-modal-backdrop {
+      left: var(--sidebar-w, 240px) !important;
+    }
+  }
+
+  /* ==========================================================================
+     STIPEND APPROVED DOSSIER & SCHEDULED PAYOUT UI
+     ========================================================================== */
+  .stipend-progression-banner {
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.18) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1.5px solid rgba(52, 211, 153, 0.5);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin: 20px 0 26px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+  .stipend-progression-banner.pending {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .stipend-progression-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .stipend-progression-tag {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #34D399;
+    text-transform: uppercase;
+  }
+  .stipend-progression-tag.pending {
+    color: #A5B4FC;
+  }
+  .stipend-progression-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 4px 0 0;
+  }
+  .stipend-progression-pill {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    background: rgba(16, 185, 129, 0.25);
+    color: #34D399;
+    border: 1px solid #10B981;
+  }
+  .stipend-progression-pill.pending {
+    background: rgba(245, 158, 11, 0.2);
+    color: #FBBF24;
+    border: 1px solid #F59E0B;
+  }
+  .stipend-progression-track {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .stipend-progression-seg {
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .stipend-progression-seg.active {
+    background: #10B981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  }
+
+  /* Master Approved Dossier Card */
+  .stipend-approved-dossier {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.10) 0%, rgba(14, 19, 31, 0.98) 60%, rgba(15, 23, 42, 1) 100%);
+    border: 1.5px solid rgba(52, 211, 153, 0.45);
+    border-radius: 20px;
+    padding: clamp(1.25rem, 3.5vw, 2.25rem) clamp(1rem, 3vw, 2rem);
+    margin-bottom: 2.5rem;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 30px rgba(16, 185, 129, 0.12);
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .stipend-approved-dossier::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #10B981 0%, #38BDF8 50%, #F59E0B 100%);
+  }
+  .dossier-top-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 1.75rem;
+  }
+  .dossier-lead {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1;
+    min-width: min(100%, 280px);
+  }
+  .dossier-shield-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    background: rgba(52, 211, 153, 0.15);
+    border: 1.5px solid rgba(52, 211, 153, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #34D399;
+    font-size: 28px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25);
+  }
+  .dossier-lead-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(52, 211, 153, 0.18);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    padding: 4px 14px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #34D399;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .dossier-lead-title {
+    font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+    font-weight: 850;
+    color: #F8FAFC;
+    margin: 0;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    word-break: break-word;
+  }
+  .dossier-lead-sub {
+    font-size: 13.5px;
+    color: #CBD5E1;
+    margin: 8px 0 0;
+    line-height: 1.6;
+    max-width: 780px;
+  }
+  .dossier-amount-card {
+    text-align: right;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    padding: 14px 22px;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    box-sizing: border-box;
+  }
+  .dossier-amount-label {
+    font-size: 11px;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 700;
+  }
+  .dossier-amount-value {
+    font-size: clamp(1.6rem, 4.5vw, 2rem);
+    font-weight: 900;
+    color: #34D399;
+    line-height: 1.2;
+    text-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+  }
+  .dossier-amount-sub {
+    font-size: 11px;
+    color: #64748B;
+    margin-top: 2px;
+  }
+
+  /* Payout Release Highlight Box */
+  .dossier-highlight-box {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1.5px solid rgba(56, 189, 248, 0.35);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
+  }
+  .dossier-highlight-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+  }
+  .dossier-highlight-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(56, 189, 248, 0.18);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #38BDF8;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .dossier-highlight-text {
+    font-size: 13.5px;
+    color: #E2E8F0;
+    line-height: 1.55;
+    min-width: 0;
+  }
+  .dossier-highlight-text strong {
+    color: #38BDF8;
+    font-weight: 750;
+  }
+
+  /* Details Grid */
+  .dossier-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 14px;
+    margin-bottom: 2rem;
+  }
+  .dossier-tile {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    padding: 16px 18px;
+    transition: all 0.2s ease;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .dossier-tile:hover {
+    border-color: rgba(52, 211, 153, 0.3);
+    background: rgba(15, 23, 42, 0.85);
+    transform: translateY(-2px);
+  }
+  .dossier-tile-label {
+    font-size: 11px;
+    color: #64748B;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 6px;
+  }
+  .dossier-tile-val {
+    font-size: 15px;
+    font-weight: 750;
+    color: #F8FAFC;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+  }
+  .dossier-tile-sub {
+    font-size: 11px;
+    color: #94A3B8;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* Multi-Button Action Bar */
+  .dossier-action-bar {
+    background: rgba(10, 14, 26, 0.85);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    box-sizing: border-box;
+  }
+  .dossier-action-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #94A3B8;
+  }
+  .dossier-action-info i {
+    color: #34D399;
+  }
+  .dossier-btn-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    box-sizing: border-box;
+  }
+
+  /* Responsive Breakpoints - Strict WCAG 2.1 AA 44px Touch & Fluid Adaptation */
+  @media (max-width: 960px) {
+    .dossier-action-bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 14px;
+      padding: 16px 18px;
+    }
+    .dossier-action-info {
+      width: 100%;
+    }
+    .dossier-btn-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .dossier-btn-group .stipend-cta-btn {
+      width: 100%;
+      min-height: 44px;
+      justify-content: center;
+      text-align: center;
+      margin: 0;
+      box-sizing: border-box;
+    }
+  }
+
+  @media (max-width: 860px) {
+    body.has-sidebar .main,
+    body.has-sidebar main,
+    .main {
+      margin-left: 0 !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+    }
+    .content {
+      padding: 18px 14px 48px !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .stipend-container {
+      padding: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .stipend-hero {
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .bounty-card {
+      min-width: 0 !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .dossier-top-flex {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+    .dossier-amount-card {
+      width: 100%;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .stipend-approved-dossier {
+      border-radius: 16px;
+      margin-bottom: 1.75rem;
+    }
+    .dossier-lead {
+      gap: 12px;
+    }
+    .dossier-shield-icon {
+      width: 46px;
+      height: 46px;
+      font-size: 22px;
+      border-radius: 12px;
+    }
+    .dossier-lead-title {
+      font-size: 1.3rem;
+      line-height: 1.3;
+    }
+    .dossier-lead-sub {
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .dossier-amount-card {
+      padding: 12px 16px;
+    }
+    .dossier-highlight-box {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      padding: 14px 16px;
+    }
+    .dossier-highlight-box .stipend-cta-btn {
+      width: 100%;
+      min-height: 44px;
+      justify-content: center;
+      text-align: center;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    .stipend-progression-banner {
+      padding: 14px 16px;
+      margin: 16px 0 20px;
+      border-radius: 12px;
+    }
+    .stipend-progression-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .stipend-progression-pill {
+      font-size: 11px;
+      padding: 4px 12px;
+    }
+    .stipend-progression-track {
+      gap: 6px;
+    }
+    .stipend-progression-seg {
+      height: 6px;
+    }
+    .dossier-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .dossier-tile {
+      padding: 12px 14px;
+    }
+    .stipend-cta-btn {
+      white-space: normal;
+      padding: 11px 16px;
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .dossier-amount-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+    .dossier-highlight-left {
+      gap: 10px;
+    }
+    .dossier-highlight-icon {
+      width: 38px;
+      height: 38px;
+      font-size: 18px;
+      border-radius: 10px;
+    }
+    .dossier-highlight-text {
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+    .stipend-hero {
+      padding: 1.15rem 0.85rem;
+    }
+  }
+</style>
+</head>
+<body class="has-sidebar">
+{% set active_page = 'stipend' %}
+{% include '_intern_sidebar.html' %}
+
+<div class="main">
+  <div class="content">
+    <div class="stipend-container">
+      
+      <!-- ====================================================================
+           1. HERO BANNER & BOUNTY COUNTER
+           ==================================================================== -->
+      <div class="stipend-hero">
+        <div>
+          <div class="hero-pill">
+            <i class="fa-solid fa-award"></i> Official DBERT Capstone Milestone
+          </div>
+          <h1 class="hero-title">
+            Internship Technical Contribution & Stipend
+          </h1>
+          <p class="hero-desc">
+            Submit your capstone deliverables to validate technical mastery. Approved submissions receive an official grant of <strong>5,000 Coins (₹5,000)</strong> credited directly to your withdrawable wallet.
+          </p>
+        </div>
+
+        <div class="bounty-card">
+          <span class="bounty-label">Milestone Bounty</span>
+          <div class="bounty-amount">
+            <i class="fa-solid fa-coins"></i> 5,000
+          </div>
+          <span class="bounty-sub">₹5,000 Directly withdrawable via UPI</span>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           1.5. DYNAMIC 4-SEGMENT PROGRESSION METER
+           ==================================================================== -->
+      {% if stipend_verified %}
+        <div class="stipend-progression-banner">
+          <div class="stipend-progression-header">
+            <div>
+              <span class="stipend-progression-tag"><i class="fa-solid fa-check-double" style="margin-right:6px;"></i>ALL GATES VERIFIED &amp; APPROVED</span>
+              <h3 class="stipend-progression-title">
+                🎉 All 4 Gates Verified — Official Stipend Disbursement Scheduled!
+              </h3>
+            </div>
+            <div>
+              <span class="stipend-progression-pill">
+                100% Complete · Approved
+              </span>
+            </div>
+          </div>
+          <div class="stipend-progression-track">
+            <div class="stipend-progression-seg active" title="Step 1: Course Certificate &amp; Verification (Complete)"></div>
+            <div class="stipend-progression-seg active" title="Step 2: 60-Day Completion Period (Complete)"></div>
+            <div class="stipend-progression-seg active" title="Step 3: Payout UPI Configured (Complete)"></div>
+            <div class="stipend-progression-seg active" title="Step 4: LinkedIn &amp; Capstone Approved (Complete)"></div>
+          </div>
+        </div>
+      {% else %}
+        {% set completed_gates = (1 if ver_info.verified else 0) + (1 if comp_info.is_completed else 0) + (1 if has_upi else 0) + (1 if (linkedin_verified or has_linkedin) else 0) %}
+        <div class="stipend-progression-banner pending">
+          <div class="stipend-progression-header">
+            <div>
+              <span class="stipend-progression-tag pending">STIPEND PROGRESSION STATUS</span>
+              <h3 class="stipend-progression-title">
+                {% if completed_gates == 4 %}
+                  🎉 All 4 Gates Complete — Eligible for ₹5,000 Stipend Release!
+                {% else %}
+                  {{ completed_gates }} of 4 Gates Unlocked — {{ 4 - completed_gates }} step{{ 's' if (4 - completed_gates) > 1 else '' }} away from ₹5,000 Stipend
+                {% endif %}
+              </h3>
+            </div>
+            <div>
+              <span class="stipend-progression-pill pending">
+                {{ (completed_gates / 4 * 100) | int }}% Complete
+              </span>
+            </div>
+          </div>
+          <!-- 4-Segment Bar -->
+          <div class="stipend-progression-track">
+            <div class="stipend-progression-seg {% if ver_info.verified %}active{% endif %}"></div>
+            <div class="stipend-progression-seg {% if comp_info.is_completed %}active{% endif %}"></div>
+            <div class="stipend-progression-seg {% if has_upi %}active{% endif %}"></div>
+            <div class="stipend-progression-seg {% if (linkedin_verified or has_linkedin) %}active{% endif %}"></div>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- ====================================================================
+           2. ALL GATES COMPLETED & SCHEDULED PAYOUT DOSSIER (IF STIPEND VERIFIED)
+              ELSE 4-POINT ELIGIBILITY & PRE-FLIGHT CHECKLIST CARDS
+           ==================================================================== -->
+      {% if stipend_verified %}
+      <div class="stipend-approved-dossier">
+        <div class="dossier-top-flex">
+          <div class="dossier-lead">
+            <div class="dossier-shield-icon">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+              <div class="dossier-lead-badge">
+                <i class="fa-solid fa-shield-halved"></i> All 4 Gates Verified &amp; Approved
+              </div>
+              <h2 class="dossier-lead-title">
+                All Gates Completed — Stipend Disbursement Scheduled
+              </h2>
+              <p class="dossier-lead-sub">
+                Congratulations! The DBERT Engineering Evaluation Committee has confirmed your <strong>public LinkedIn experience credential</strong> and validated your open-source technical contribution on GitHub to <strong>{{ verified_github_repo or verified_github_org }}</strong> under organization <strong>{{ verified_github_org }}</strong>.
+              </p>
+            </div>
+          </div>
+          <div class="dossier-amount-card">
+            <div class="dossier-amount-label">Approved Total Credit</div>
+            <div class="dossier-amount-value">₹{{ stipend_amount }} /-</div>
+            <div class="dossier-amount-sub">₹5,000 Milestone + ₹499 Deposit Refund</div>
+          </div>
+        </div>
+
+        <!-- Payout Release Highlight Card -->
+        <div class="dossier-highlight-box">
+          <div class="dossier-highlight-left">
+            <div class="dossier-highlight-icon">
+              <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <div class="dossier-highlight-text">
+              <div><strong>Scheduled Payout Release: {{ stipend_release_date_display }}</strong></div>
+              <div>Automated direct credit to linked UPI. Scheduled 60 days post-completion following technical verification.</div>
+            </div>
+          </div>
+          <div>
+            <span class="stipend-cta-btn stipend-cta-emerald stipend-btn-sm" style="cursor:default; pointer-events:none;">
+              <i class="fa-solid fa-shield-heart"></i> Queue Verified &amp; Locked
+            </span>
+          </div>
+        </div>
+
+        <!-- Details Grid -->
+        <div class="dossier-grid">
+          <div class="dossier-tile">
+            <div class="dossier-tile-label">Scheduled Payout Date</div>
+            <div class="dossier-tile-val" style="color: #38BDF8;">
+              <i class="fa-regular fa-calendar-check"></i>{{ stipend_release_date_display }}
+            </div>
+            <div class="dossier-tile-sub">Standard 60-day post-completion maturation schedule</div>
+          </div>
+
+          <div class="dossier-tile">
+            <div class="dossier-tile-label">Beneficiary Payout UPI ID</div>
+            <div class="dossier-tile-val" style="font-family: monospace;">
+              <i class="fa-solid fa-wallet" style="color: #A78BFA;"></i>{{ masked_upi }}
+            </div>
+            <div class="dossier-tile-sub">Direct bank transfer via UPI · Fernet AES-256 encrypted</div>
+          </div>
+
+          <div class="dossier-tile">
+            <div class="dossier-tile-label">Verified GitHub Org</div>
+            <div class="dossier-tile-val" style="color: #FCD34D;">
+              <i class="fa-brands fa-github"></i>{{ verified_github_org }}
+            </div>
+            <div class="dossier-tile-sub">Repository contribution validated &amp; archived in production audit ledger</div>
+          </div>
+
+          <div class="dossier-tile">
+            <div class="dossier-tile-label">Cryptographic Credential</div>
+            <div class="dossier-tile-val" style="color: #34D399; font-family: monospace;">
+              <i class="fa-solid fa-certificate"></i>{{ ver_info.cert_id or 'DBERT-VERIFIED' }}
+            </div>
+            <div class="dossier-tile-sub">Sealed in DBERT Registry &amp; published to Pre-Vetted Engineers Directory</div>
+          </div>
+        </div>
+
+        <!-- Distinct Multi-Button Action Bar -->
+        <div class="dossier-action-bar">
+          <div class="dossier-action-info">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Official Candidate Dossier Actions</span>
+          </div>
+          <div class="dossier-btn-group">
+            <a href="https://dbert.in/verify/{{ ver_info.cert_id }}" target="_blank" rel="noopener" class="stipend-cta-btn stipend-cta-emerald">
+              <i class="fa-solid fa-file-shield"></i> View Proof Dossier &rarr;
+            </a>
+            <a href="/portal/certificate/{{ ver_info.cert_id }}/print" target="_blank" rel="noopener" class="stipend-cta-btn stipend-cta-blue">
+              <i class="fa-solid fa-print"></i> Print Official 3-Doc Dossier &rarr;
+            </a>
+            <a href="/intern/ambassador/withdraw" class="stipend-cta-btn stipend-cta-gold">
+              <i class="fa-solid fa-wallet"></i> Withdrawal Wallet &rarr;
+            </a>
+            <a href="https://wa.me/918192911360?text=Hi%20Admissions%20Team,%20my%20stipend%20is%20approved%20for%20release%20on%20{{ stipend_release_date }}%20(Ref:%20{{ ver_info.cert_id }})" target="_blank" rel="noopener" class="stipend-cta-btn stipend-cta-dark">
+              <i class="fa-brands fa-whatsapp" style="color:#25D366;"></i> Admissions Support &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div>
+        <h2 class="section-title">
+          <i class="fa-solid fa-list-check"></i> Eligibility & Pre-flight Checklist
+        </h2>
+        <div class="checklist-grid">
+          
+          <!-- Gate 1: Certificate Verification -->
+          <div class="gate-card {% if ver_info.verified %}gate-card-passed{% elif ver_info.is_provisional %}gate-card-warning{% else %}gate-card-warning{% endif %}">
+            <div class="gate-card-top">
+              <div class="gate-icon-badge {% if ver_info.verified %}icon-passed{% else %}icon-warning{% endif %}">
+                {% if ver_info.verified %}
+                  <i class="fa-solid fa-certificate"></i>
+                {% else %}
+                  <i class="fa-solid fa-lock"></i>
+                {% endif %}
+              </div>
+              <span class="gate-status-pill {% if ver_info.verified %}status-passed{% else %}status-warning{% endif %}">
+                {{ ver_info.status }}
+              </span>
+            </div>
+            <h3 class="gate-title">Step 1: Course Certificate &amp; Verification</h3>
+            <p class="gate-text">
+              {% if ver_info.verified %}
+                Official credential verified: <code>{{ ver_info.cert_id }}</code>. Domain curriculum, capstone evaluation, and verified credential complete. Full stipend eligibility unlocked.
+              {% elif ver_info.is_provisional %}
+                Course completed! Your credential is currently <strong>Provisional (<code>{{ ver_info.cert_id }}</code>)</strong>. You have already paid the ₹499 caution deposit. Complete your remaining <strong>₹1,500 balance</strong> to unlock your Official 3-Document Verified Dossier &amp; enable the ₹5,000 stipend release.
+              {% else %}
+                Complete your domain curriculum &amp; quizzes on LMS to earn your Certificate of Completion, then finalize your incubation balance to unlock stipend rights.
+              {% endif %}
+            </p>
+            <div class="gate-footer" style="display:flex; flex-direction:column; gap:12px; margin-top:16px;">
+              {% if ver_info.verified %}
+                <a href="/portal/certificate/{{ ver_info.cert_id }}/print" target="_blank" rel="noopener" class="stipend-cta-btn stipend-cta-emerald" style="width:100%; justify-content:center; text-decoration:none;">
+                  <i class="fa-solid fa-file-shield"></i>
+                  <span>View Verified Dossier &rarr;</span>
+                </a>
+              {% elif ver_info.is_provisional %}
+                <div style="background:rgba(245,158,11,0.12); border:1.5px solid #d97706; border-radius:12px; padding:14px; width:100%; box-sizing:border-box;">
+                  <div style="font-size:11px; font-weight:800; color:#fbbf24; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+                    <i class="fa-solid fa-bolt"></i> OPTION A: UPGRADE CREDENTIAL &amp; UNLOCK STIPEND
+                  </div>
+                  <div style="font-size:12.5px; color:#FDE68A; margin-bottom:10px; line-height:1.4;">
+                    Pay remaining <strong>₹1,500 balance</strong> (net of ₹499 credit) to unlock official 3-doc credential packet and earn ₹5,000 stipend.
+                  </div>
+                  <a href="https://dbert.in/enroll/1999?email={{ intern.email }}" target="_blank" rel="noopener" class="stipend-cta-btn stipend-cta-gold" style="width:100%; justify-content:center; text-decoration:none;">
+                    <i class="fa-solid fa-unlock"></i>
+                    <span>Complete ₹1,500 Balance &amp; Unlock Stipend &rarr;</span>
+                  </a>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px 14px; width:100%; box-sizing:border-box;">
+                  <div style="font-size:11px; font-weight:700; color:#94A3B8; text-transform:uppercase; margin-bottom:2px;">
+                    OPTION B: RE-TAKE SPRINT EVALUATION (FREE)
+                  </div>
+                  <div style="font-size:12px; color:#64748B; margin-bottom:8px;">
+                    Re-enroll in next cohort without mentor review or stipend rights.
+                  </div>
+                  <a href="/tasks" class="stipend-cta-btn stipend-cta-dark" style="width:100%; justify-content:center; text-decoration:none;">
+                    <span>Continue Sprint Practice &rarr;</span>
+                  </a>
+                </div>
+              {% else %}
+                <a href="https://dbert.in/enroll/1999?email={{ intern.email }}" target="_blank" rel="noopener" class="stipend-cta-btn stipend-cta-gold" style="width:100%; justify-content:center; text-decoration:none;">
+                  <i class="fa-solid fa-bolt"></i>
+                  <span>Complete Incubation Verification &rarr;</span>
+                </a>
+                <a href="/courses" class="stipend-cta-btn stipend-cta-emerald" style="width:100%; justify-content:center; text-decoration:none;">
+                  <i class="fa-solid fa-graduation-cap"></i>
+                  <span>Resume Course Curriculum &rarr;</span>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Gate 2: Completion Date -->
+          <div class="gate-card {% if comp_info.is_completed %}gate-card-passed{% else %}gate-card-info{% endif %}">
+            <div class="gate-card-top">
+              <div class="gate-icon-badge {% if comp_info.is_completed %}icon-passed{% else %}icon-info{% endif %}">
+                {% if comp_info.is_completed %}
+                  <i class="fa-solid fa-calendar-check"></i>
+                {% else %}
+                  <i class="fa-solid fa-hourglass-half"></i>
+                {% endif %}
+              </div>
+              <span class="gate-status-pill {% if comp_info.is_completed %}status-passed{% else %}status-info{% endif %}">
+                {% if comp_info.is_completed %}Completed{% else %}In Progress{% endif %}
+              </span>
+            </div>
+            <h3 class="gate-title">Step 2: Internship Duration</h3>
+            <p class="gate-text">
+              {% if comp_info.is_completed %}
+                Official duration completed on <strong>{{ comp_info.completion_date_display }}</strong>. Submissions are open.
+              {% elif comp_info.days_remaining is not none and comp_info.days_remaining < 900 %}
+                Internship is active. Stipend application unlocks upon completion date: <strong>{{ comp_info.completion_date_display }}</strong> ({{ comp_info.days_remaining }} days remaining).
+              {% else %}
+                Internship tenure is active. Completion milestone establishes 60 days from sprint enrollment.
+              {% endif %}
+            </p>
+            {% if not comp_info.is_completed %}
+              <div class="gate-footer">
+                <span class="gate-link" style="color:#38BDF8; font-weight:700; font-size:12px; display:inline-flex; align-items:center; gap:6px;">
+                  <i class="fa-regular fa-clock"></i>
+                  {% if comp_info.days_remaining is not none and comp_info.days_remaining < 900 %}
+                    Live countdown: {{ comp_info.days_remaining }} days to maturity
+                  {% else %}
+                    60-Day Sprint Tenure Active
+                  {% endif %}
+                </span>
+              </div>
+            {% else %}
+              <div class="gate-footer">
+                <span class="gate-link" style="color:#34D399; font-weight:700; font-size:12px; display:inline-flex; align-items:center; gap:6px;">
+                  <i class="fa-solid fa-circle-check"></i>
+                  Duration Milestone Met
+                </span>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Gate 3: UPI Setup -->
+          <div class="gate-card {% if has_upi %}gate-card-passed{% else %}gate-card-warning{% endif %}" id="stipendGateUpiCard">
+            <div class="gate-card-top">
+              <div class="gate-icon-badge {% if has_upi %}icon-passed{% else %}icon-purple{% endif %}" id="stipendGateUpiIcon">
+                <i class="fa-solid fa-wallet"></i>
+              </div>
+              <span class="gate-status-pill {% if has_upi %}status-passed{% else %}status-warning{% endif %}" id="stipendGateUpiPill">
+                {% if has_upi %}Ready{% else %}Action Needed{% endif %}
+              </span>
+            </div>
+            <h3 class="gate-title">Step 3: Payout UPI Account</h3>
+            <p class="gate-text" id="stipendGateUpiText">
+              {% if has_upi %}
+                Fernet-encrypted UPI ID on file: <code>{{ masked_upi }}</code>. Payouts route automatically.
+              {% else %}
+                No payout UPI ID linked to your account. Add your UPI ID (GPay / PhonePe / Paytm / BHIM) to receive stipend payouts.
+              {% endif %}
+            </p>
+
+            <div id="stipendUpiInputWrap" style="margin-top:12px; {% if has_upi %}display:none;{% endif %}">
+              <div style="display:flex;gap:12px;align-items:center;">
+                <input type="text" id="stipendUpiInput" placeholder="name@bank (e.g. 9603742553@ybl)" style="flex:1;background:#07090E;border:1px solid rgba(255,255,255,0.22);border-radius:8px;color:#fff;padding:9px 12px;font-family:monospace;font-size:13px;outline:none;" />
+                <button type="button" id="btnSaveStipendUpi" class="stipend-cta-btn stipend-cta-emerald stipend-btn-sm">
+                  <i class="fa-solid fa-wallet"></i> Link Payout UPI
+                </button>
+              </div>
+              <div id="stipendUpiMsg" style="font-size:12px;margin-top:6px;display:none;"></div>
+            </div>
+
+            <div id="stipendUpiToggleWrap" style="margin-top:14px; {% if not has_upi %}display:none;{% endif %}">
+              <button type="button" id="btnToggleStipendUpi" class="stipend-cta-btn stipend-cta-dark stipend-btn-sm" style="color:#FBBF24 !important;">
+                <i class="fa-solid fa-pen-to-square"></i> Change Payout UPI ID
+              </button>
+            </div>
+          </div>
+
+          <!-- Gate 4: Public LinkedIn Verification -->
+          <div class="gate-card {% if linkedin_verified %}gate-card-passed{% elif has_linkedin %}gate-card-info{% else %}gate-card-warning{% endif %}" id="stipendGateLinkedinCard">
+            <div class="gate-card-top">
+              <div class="gate-icon-badge {% if linkedin_verified %}icon-passed{% elif has_linkedin %}icon-info{% else %}icon-linkedin{% endif %}" id="stipendGateLinkedinIcon">
+                <i class="fa-brands fa-linkedin"></i>
+              </div>
+              <span class="gate-status-pill {% if linkedin_verified %}status-passed{% elif linkedin_status == 'PENDING_SCRAPE' %}status-info{% else %}status-warning{% endif %}" id="stipendGateLinkedinPill">
+                {% if linkedin_verified %}Verified{% elif linkedin_status == 'PENDING_SCRAPE' %}In Review{% elif has_linkedin %}Unverified{% else %}Action Needed{% endif %}
+              </span>
+            </div>
+            <h3 class="gate-title">Step 4: Public LinkedIn Experience</h3>
+            <p class="gate-text" id="stipendGateLinkedinText">
+              {% if linkedin_verified %}
+                Public profile verified: <a href="{{ linkedin_url }}" target="_blank" rel="noopener" style="color:#38BDF8;word-break:break-all;font-weight:700;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.35);padding:3px 9px;border-radius:6px;text-decoration:none;display:inline-block;margin:2px 0;">{{ linkedin_url }}</a>. DBERT credentials detected and verified. Your profile is featured with a verified badge on the Pre-Vetted Engineers Directory.
+              {% elif has_linkedin %}
+                LinkedIn profile linked: <a href="{{ linkedin_url }}" target="_blank" rel="noopener" style="color:#38BDF8;word-break:break-all;font-weight:700;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.35);padding:3px 9px;border-radius:6px;text-decoration:none;display:inline-block;margin:2px 0;">{{ linkedin_url }}</a>. 
+                {% if linkedin_status == 'PENDING_SCRAPE' %}
+                  Queued for automated public verification scan.
+                {% else %}
+                  Ensure you have added <strong>DBERT</strong> to your Experience or Licenses &amp; Certifications, then click "Re-scan".
+                {% endif %}
+              {% else %}
+                Link your public LinkedIn profile and add DBERT under Experience or Certifications to unlock full directory placement and recruiter visibility.
+              {% endif %}
+            </p>
+
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:2px;">
+                {% if add_to_linkedin_url %}
+                  <a href="{{ add_to_linkedin_url }}" target="_blank" rel="noopener" class="stipend-cta-btn stipend-cta-linkedin stipend-btn-sm">
+                    <i class="fa-brands fa-linkedin"></i> 1-Click: Add Cert to LinkedIn &rarr;
+                  </a>
+                {% endif %}
+                <button type="button" id="btnOpenSnippetModal" data-act-click="openExperienceSnippetModal" class="stipend-cta-btn stipend-cta-gold stipend-btn-sm">
+                  <i class="fa-solid fa-copy"></i> Copy Experience Snippet &rarr;
+                </button>
+              </div>
+
+              <div id="stipendLinkedinInputWrap" style="{% if has_linkedin or linkedin_verified %}display:none;{% endif %}">
+                <div style="display:flex;gap:12px;align-items:center;">
+                  <input type="url" id="stipendLinkedinInput" value="{{ linkedin_url or '' }}" placeholder="https://www.linkedin.com/in/username" style="flex:1;background:#07090E;border:1px solid rgba(255,255,255,0.22);border-radius:8px;color:#fff;padding:9px 12px;font-size:13px;outline:none;" />
+                  <button type="button" id="btnSaveLinkedin" data-act-click="submitLinkedInProfile" class="stipend-cta-btn stipend-cta-blue stipend-btn-sm">
+                    <i class="fa-solid fa-shield-check"></i> Save &amp; Verify Profile
+                  </button>
+                </div>
+              </div>
+
+              {% if has_linkedin or linkedin_verified %}
+                <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:4px;">
+                  {% if not linkedin_verified %}
+                    <button type="button" id="btnCheckLinkedinNow" data-act-click="checkLinkedInNow" class="stipend-cta-btn stipend-cta-blue stipend-btn-sm">
+                      <i class="fa-solid fa-arrows-rotate"></i> Re-scan Public LinkedIn Now
+                    </button>
+                  {% endif %}
+                  <button type="button" id="btnShowUpdateLinkedin" data-act-click="showUpdateLinkedin" class="stipend-cta-btn stipend-cta-dark stipend-btn-sm" style="color:#C7D2FE !important;">
+                    <i class="fa-solid fa-pen-to-square"></i> Change LinkedIn URL
+                  </button>
+                </div>
+              {% endif %}
+
+              <div id="linkedinFeedbackMsg" style="font-size:12px;margin-top:4px;display:none;padding:6px 10px;border-radius:6px;"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- ====================================================================
+           3. SYSTEM GUIDANCE NOTICE (IF GEMINI AI OFFLINE)
+           ==================================================================== -->
+      {% if not has_gemini %}
+        <div class="system-notice">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <div>
+            <div class="notice-title">System Notice: AI Pre-Screening Engine Setup</div>
+            <div class="notice-body">
+              The automated AI evaluation service is currently completing configuration. If you are an LMS administrator, configure the <code>GEMINI_API_KEY</code> in the Admin Portal to enable instant evaluations. Submissions are temporarily queued.
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- ====================================================================
+           4. MAIN CONTENT AREA: UNLOCKED FORM VS ACTIVE SUBMISSION VS LOCKED
+           ==================================================================== -->
+      {% if all_gates_passed %}
+
+        <!-- Existing Submission Tracking (if already submitted) -->
+        {% if existing_submission %}
+          <div class="form-card">
+            <div class="form-header">
+              <div>
+                <span class="step-eyebrow">Submission Status</span>
+                <h2 class="form-title">{{ existing_submission.task_title or "Stipend Milestone Submission" }}</h2>
+                <p class="form-sub">Submitted on {{ existing_submission.created_at }}</p>
+              </div>
+              <div>
+                {% if existing_submission.status == 'approved' %}
+                  <span class="gate-status-pill status-passed" style="font-size: 0.8125rem; padding: 0.4rem 0.95rem;">
+                    <i class="fa-solid fa-circle-check"></i> Approved & Credited (+5,000 Coins)
+                  </span>
+                {% elif existing_submission.status in ('rejected', 'changes_requested') %}
+                  <span class="gate-status-pill status-warning" style="font-size: 0.8125rem; padding: 0.4rem 0.95rem; background: rgba(245, 158, 11, 0.2); color: #FBBF24; border: 1px solid #F59E0B;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Action Required: Revision Requested
+                  </span>
+                {% else %}
+                  <span class="gate-status-pill status-warning" style="font-size: 0.8125rem; padding: 0.4rem 0.95rem;">
+                    <i class="fa-solid fa-hourglass-start animate-spin"></i> In Review
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+
+            {% if existing_submission.status in ('rejected', 'changes_requested') and existing_submission.ai_evaluation_notes %}
+              <div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid #F59E0B; padding: 14px 18px; border-radius: 0 10px 10px 0; margin: 18px 0; font-size: 13px; color: #FEF3C7; line-height: 1.6;">
+                <div style="font-weight: 800; color: #FBBF24; margin-bottom: 6px; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;">
+                  <i class="fa-solid fa-circle-exclamation"></i> Evaluation Mentor Review Notes &amp; Required Revisions
+                </div>
+                <div style="margin-bottom: 8px;">{{ existing_submission.ai_evaluation_notes }}</div>
+                <div style="font-weight: 700; color: #38BDF8; font-size: 12px;">
+                  Action: Please ensure your contribution is towards an authorized partner repository (<a href="https://github.com/Alkameinc" target="_blank" rel="noopener" style="color:#67E8F9;">Alkameinc</a>, <a href="https://github.com/Gayatri-Education" target="_blank" rel="noopener" style="color:#67E8F9;">Gayatri-Education</a>, <a href="https://github.com/Aivaratechinfomatics" target="_blank" rel="noopener" style="color:#67E8F9;">Aivaratechinfomatics</a>, <a href="https://github.com/DBERT-INDIA" target="_blank" rel="noopener" style="color:#67E8F9;">DBERT-INDIA</a>) or that DBERT experience is added on LinkedIn, then re-submit below.
+                </div>
+              </div>
+            {% endif %}
+
+            <!-- 5-Step Review Timeline Visualizer -->
+            <div class="timeline-grid">
+              <div class="timeline-step">
+                <div class="step-num-bubble bubble-done">1</div>
+                <div>
+                  <div class="step-info-title">Deliverables Submitted</div>
+                  <div class="step-info-sub">GitHub, demo & report logged</div>
+                </div>
+              </div>
+
+              <div class="timeline-step">
+                <div class="step-num-bubble {% if existing_submission.ai_evaluation_score %}bubble-done{% else %}bubble-active{% endif %}">2</div>
+                <div>
+                  <div class="step-info-title">AI Pre-Screening</div>
+                  <div class="step-info-sub">
+                    {% if existing_submission.ai_evaluation_score %}
+                      Score: <strong style="color:#34D399;">{{ existing_submission.ai_evaluation_score }}/100</strong>
+                    {% else %}
+                      Evaluating rubric...
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-step">
+                <div class="step-num-bubble {% if capstone_article and capstone_article.status == 'PUBLISHED' %}bubble-done{% elif capstone_article %}bubble-active{% else %}bubble-pending{% endif %}">3</div>
+                <div>
+                  <div class="step-info-title">Capstone Case Study</div>
+                  <div class="step-info-sub">
+                    {% if capstone_article and capstone_article.status == 'PUBLISHED' %}
+                      Live on dbert.in/blog
+                    {% elif capstone_article and capstone_article.status == 'PENDING_REVIEW' %}
+                      In Editorial Review
+                    {% elif capstone_article %}
+                      Draft Ready
+                    {% else %}
+                      Action Required
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-step">
+                <div class="step-num-bubble {% if existing_submission.status == 'approved' %}bubble-done{% elif capstone_article and capstone_article.status == 'PUBLISHED' %}bubble-active{% else %}bubble-pending{% endif %}">4</div>
+                <div>
+                  <div class="step-info-title">Staff Review</div>
+                  <div class="step-info-sub">
+                    {% if existing_submission.status == 'approved' %}
+                      Approved by Mentor
+                    {% elif capstone_article and capstone_article.status == 'PUBLISHED' %}
+                      Queued for sign-off
+                    {% else %}
+                      Awaiting Case Study
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-step">
+                <div class="step-num-bubble {% if existing_submission.status == 'approved' %}bubble-done{% else %}bubble-pending{% endif %}">5</div>
+                <div>
+                  <div class="step-info-title">Payout Ready</div>
+                  <div class="step-info-sub">
+                    {% if existing_submission.status == 'approved' %}
+                      Claim ₹5,000 on Wallet
+                    {% else %}
+                      Locked
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Capstone Technical Case Study Action Card (Gating for Step 4) -->
+            <div style="background:linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(15,23,42,0.85) 100%);border:1px solid rgba(99,102,241,0.35);border-radius:14px;padding:1.5rem;margin:1.5rem 0;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1.25rem;flex-wrap:wrap;">
+                <div>
+                  <span style="font-size:0.75rem;font-weight:700;color:#A5B4FC;text-transform:uppercase;letter-spacing:0.06em;">
+                    <i class="fa-solid fa-feather-pointed"></i> Step 3 Prerequisite: Engineering Case Study
+                  </span>
+                  <h3 style="font-size:1.15rem;color:#fff;margin:0.35rem 0;font-weight:700;">
+                    {% if capstone_article and capstone_article.status == 'PUBLISHED' %}
+                      ✓ Case Study Officially Published on dbert.in/blog
+                    {% elif capstone_article and capstone_article.status == 'PENDING_REVIEW' %}
+                      ⏳ Case Study Submitted — Under Editorial Review
+                    {% elif capstone_article and capstone_article.status == 'DRAFT' %}
+                      ✎ Capstone Draft Generated — Review &amp; Submit
+                    {% else %}
+                      Publish Your Capstone Case Study to Unlock ₹5,000 Stipend
+                    {% endif %}
+                  </h3>
+                  <p style="color:#CBD5E1;font-size:0.875rem;margin:0;max-width:680px;line-height:1.6;">
+                    {% if capstone_article and capstone_article.status == 'PUBLISHED' %}
+                      Your technical engineering walkthrough is live on <strong>dbert.in/blog</strong>! Staff review for your ₹5,000 stipend payout release is now active.
+                    {% elif capstone_article and capstone_article.status == 'PENDING_REVIEW' %}
+                      Your draft has been submitted to the DBERT Editorial Board. Once editorial sign-off is complete, staff will authorize your ₹5,000 release.
+                    {% elif capstone_article and capstone_article.status == 'DRAFT' %}
+                      Your draft is prepared with your GitHub repo and rubric metrics. Polish your write-up and click Submit to request editorial publication.
+                    {% else %}
+                      To finalize your stipend dossier and feature your verified GitHub repository and demo on <strong>dbert.in/blog</strong>, generate your capstone engineering walkthrough.
+                    {% endif %}
+                  </p>
+                  <div style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    {% if has_intern_gemini_key %}
+                      <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#34D399;font-size:12px;font-weight:600;">
+                        <i class="fa-solid fa-sparkles"></i> Gemini AI Engine Active ({{ intern_gemini_key_masked }})
+                        <button type="button" class="btn-open-gemini-modal" data-act-click="openGeminiKeyModal" style="background:none;border:none;color:#A5B4FC;text-decoration:underline;cursor:pointer;padding:0;font-size:12px;font-weight:600;margin-left:6px;">Update Key</button>
+                      </div>
+                    {% else %}
+                      <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:#FBBF24;font-size:12px;font-weight:600;">
+                        <i class="fa-solid fa-key"></i> Free Gemini API Key Required
+                        <button type="button" class="btn-open-gemini-modal" data-act-click="openGeminiKeyModal" style="background:none;border:none;color:#38BDF8;text-decoration:underline;cursor:pointer;padding:0;font-size:12px;font-weight:700;margin-left:6px;">Configure Key &rarr;</button>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div>
+                  {% if capstone_article and capstone_article.status == 'PUBLISHED' %}
+                    <a href="https://dbert.in/blog/{{ capstone_article.slug or capstone_article.title|lower|replace(' ', '-') }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.65rem 1.25rem;border-radius:8px;background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.4);color:#34D399;font-weight:700;font-size:0.875rem;text-decoration:none;">
+                      <i class="fa-solid fa-arrow-up-right-from-square"></i> View Live on dbert.in
+                    </a>
+                  {% elif capstone_article and capstone_article.status == 'PENDING_REVIEW' %}
+                    <a href="/intern/articles?edit={{ capstone_article.id }}" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.65rem 1.25rem;border-radius:8px;background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.4);color:#FBBF24;font-weight:700;font-size:0.875rem;text-decoration:none;">
+                      <i class="fa-solid fa-eye"></i> View Submitted Draft
+                    </a>
+                  {% elif capstone_article and capstone_article.status == 'DRAFT' %}
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                      <a href="/intern/articles?edit={{ capstone_article.id }}" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.65rem 1.25rem;border-radius:8px;background:linear-gradient(135deg, #6366F1, #4F46E5);border:none;color:#fff;font-weight:700;font-size:0.875rem;text-decoration:none;box-shadow:0 4px 12px rgba(79,70,229,0.4);">
+                        <i class="fa-solid fa-pen-to-square"></i> Open Draft &amp; Submit &rarr;
+                      </a>
+                      <button type="button" class="btn-scaffold-article" data-force="true" data-act-click="triggerArticleScaffold" data-arg-click='[true]' style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.65rem 1rem;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:#CBD5E1;font-weight:600;font-size:0.8125rem;cursor:pointer;">
+                        <i class="fa-solid fa-arrows-rotate"></i> Regenerate with AI
+                      </button>
+                    </div>
+                  {% else %}
+                    <button type="button" id="btnScaffoldArticle" class="btn-scaffold-article" data-act-click="triggerArticleScaffold" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.4rem;border-radius:8px;background:linear-gradient(135deg, #10B981, #059669);border:none;color:#fff;font-weight:700;font-size:0.875rem;cursor:pointer;box-shadow:0 4px 14px rgba(16,185,129,0.35);">
+                      <i class="fa-solid fa-bolt"></i> Auto-Generate Capstone Draft
+                    </button>
+                  {% endif %}
+                </div>
+              </div>
+              <div id="scaffoldFeedback" style="display:none;margin-top:12px;font-size:0.8125rem;padding:8px 12px;border-radius:6px;"></div>
+            </div>
+
+            <!-- Evaluator Rubric Feedback -->
+            {% if existing_submission.ai_evaluation_notes %}
+              <div class="rubric-box">
+                <div class="rubric-label">
+                  <i class="fa-solid fa-microchip"></i> Evaluator Rubric Feedback
+                </div>
+                <div class="rubric-content">
+                  {{ existing_submission.ai_evaluation_notes }}
+                </div>
+              </div>
+            {% endif %}
+
+            <!-- Approved Reward Callout -->
+            {% if existing_submission.status == 'approved' %}
+              <div class="reward-callout">
+                <div class="reward-callout-left">
+                  <i class="fa-solid fa-wallet reward-callout-icon"></i>
+                  <div>
+                    <div class="reward-title">Stipend Credited to Wallet</div>
+                    <div class="reward-sub">5,000 Coins are available in your withdrawable balance.</div>
+                  </div>
+                </div>
+                <a href="/ambassador" class="btn-payout-claim">
+                  <span>Request UPI Payout</span>
+                  <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <!-- Capstone Submission Form (If not submitted or rejected/changes requested) -->
+        {% if not existing_submission or existing_submission.status in ('rejected', 'changes_requested') %}
+          <div class="form-card">
+            <div class="form-header">
+              <div>
+                <span class="step-eyebrow">Step 4 of 4</span>
+                <h2 class="form-title">Submit Capstone Deliverables</h2>
+                <p class="form-sub">
+                  Track: <strong style="color:#FFFFFF;">{{ active_task.target_domain or ver_info.domain }}</strong> — Bounty: <strong style="color:#10B981;">5,000 Coins (₹5,000)</strong>
+                </p>
+              </div>
+            </div>
+
+            <form action="/stipend/tasks/{{ active_task.id }}/submit" method="POST" enctype="multipart/form-data">
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+              <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+              
+              <!-- 1. GitHub Repo URL -->
+              <div class="form-group">
+                <label class="form-label">
+                  1. GitHub Repository URL <span class="req">*</span>
+                </label>
+                <div class="input-icon-wrap">
+                  <i class="fa-brands fa-github"></i>
+                  <input type="url" name="github_repo_url" required placeholder="https://github.com/username/project-repo" class="form-input">
+                </div>
+                <div class="form-help">Repository must be public and contain source code, dependencies, and README documentation.</div>
+              </div>
+
+              <!-- 2. Live Demo URL -->
+              <div class="form-group">
+                <label class="form-label">
+                  2. Live Demo / Deployment URL <span class="opt">(Optional but recommended)</span>
+                </label>
+                <div class="input-icon-wrap">
+                  <i class="fa-solid fa-globe"></i>
+                  <input type="url" name="live_demo_url" placeholder="https://my-project.vercel.app or Colab / Streamlit link" class="form-input">
+                </div>
+              </div>
+
+              <!-- 3. Technical Report PDF -->
+              <div class="form-group">
+                <label class="form-label">
+                  3. Technical Contribution Report (PDF) <span class="opt">(Optional, Max 10MB)</span>
+                </label>
+                <input type="file" name="report_pdf" accept=".pdf" class="file-input">
+                <div class="form-help">Include architecture diagrams, benchmark metrics, or executive summaries.</div>
+              </div>
+
+              <!-- 4. Architectural Notes -->
+              <div class="form-group">
+                <label class="form-label">
+                  4. Project Architecture & Technical Description <span class="req">*</span>
+                </label>
+                <textarea name="submission_content" rows="4" required placeholder="Summarize your architecture, tech stack, key algorithms, and problems solved..." class="form-textarea"></textarea>
+              </div>
+
+              <!-- Footer CTA -->
+              <div class="form-footer">
+                <div class="form-guarantee">
+                  <i class="fa-solid fa-shield-halved"></i>
+                  <span>AI pre-screened & evaluated against rubrics</span>
+                </div>
+                <button type="submit" class="btn-submit-stipend">
+                  <span>Submit for Stipend Evaluation</span>
+                  <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        {% endif %}
+
+      {% else %}
+
+        <!-- Locked Experience State -->
+        <div class="locked-card">
+          <div class="locked-icon-bubble">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <h3 class="locked-title">Stipend Submission Form is Currently Locked</h3>
+          <p class="locked-desc">
+            To maintain academic integrity and financial compliance, all three prerequisite criteria in the checklist above must be completed before submitting your capstone contribution.
+          </p>
+
+          <div class="locked-actions" style="margin-top:20px; display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
+            {% if not ver_info.verified %}
+              <a href="https://dbert.in/verify/unlock?{% if ver_info and ver_info.cert_id %}certid={{ ver_info.cert_id }}&{% endif %}email={{ intern.email }}" target="_blank" rel="noopener" class="btn-verify-cta" style="background:linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color:#0b1120 !important; font-weight:900; font-size:15px; padding:15px 30px; border-radius:10px; box-shadow:0 6px 22px rgba(245,158,11,0.5); text-transform:uppercase; letter-spacing:0.4px; display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
+                <span>Complete Official ₹299 Verification Form</span>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            {% endif %}
+            {% if not has_upi %}
+              <a href="/ambassador" class="btn-upi-cta" style="background:linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); color:#ffffff !important; font-weight:800; font-size:14px; padding:15px 26px; border-radius:10px; box-shadow:0 4px 16px rgba(168,85,247,0.4); display:inline-flex; align-items:center; gap:8px; text-decoration:none;">
+                <span>Configure Payout UPI ID</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+
+
+<script nonce="{{ csp_nonce() }}">
+  (function() {
+    const inputWrap = document.getElementById('stipendUpiInputWrap');
+    const toggleBtn = document.getElementById('btnToggleStipendUpi');
+    const saveBtn = document.getElementById('btnSaveStipendUpi');
+    const inputEl = document.getElementById('stipendUpiInput');
+    const msgEl = document.getElementById('stipendUpiMsg');
+    const textEl = document.getElementById('stipendGateUpiText');
+    const pillEl = document.getElementById('stipendGateUpiPill');
+    const iconEl = document.getElementById('stipendGateUpiIcon');
+    const cardEl = document.getElementById('stipendGateUpiCard');
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', function() {
+        if (inputWrap) {
+          const isHidden = inputWrap.style.display === 'none';
+          inputWrap.style.display = isHidden ? 'block' : 'none';
+          if (isHidden && inputEl) inputEl.focus();
+        }
+      });
+    }
+
+    if (saveBtn) {
+      saveBtn.addEventListener('click', async function() {
+        const upi = (inputEl ? inputEl.value : '').trim().toLowerCase();
+        if (!upi || !upi.includes('@') || upi.length < 5) {
+          if (msgEl) {
+            msgEl.style.display = 'block';
+            msgEl.style.color = '#EF4444';
+            msgEl.textContent = 'Please enter a valid UPI ID (e.g. yourname@bank or 9876543210@paytm).';
+          }
+          return;
+        }
+
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+        if (msgEl) {
+          msgEl.style.display = 'block';
+          msgEl.style.color = '#94A3B8';
+          msgEl.textContent = 'Encrypting & saving UPI ID...';
+        }
+
+        try {
+          const r = await fetch('/intern/ambassador/upi', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': '{{ csrf_token() }}'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ upi_id: upi })
+          });
+          const d = await r.json();
+          if (d.status === 'success') {
+            if (msgEl) {
+              msgEl.style.color = '#10B981';
+              msgEl.textContent = d.message || 'UPI ID linked successfully!';
+            }
+            if (textEl) {
+              textEl.innerHTML = 'Fernet-encrypted UPI ID on file: <code>' + (d.upi_masked || upi) + '</code>. Payouts route automatically.';
+            }
+            if (pillEl) {
+              pillEl.className = 'gate-status-pill status-passed';
+              pillEl.textContent = 'Ready';
+            }
+            if (iconEl) {
+              iconEl.className = 'gate-icon-badge icon-passed';
+            }
+            if (cardEl) {
+              cardEl.className = 'gate-card gate-card-passed';
+            }
+            setTimeout(function() {
+              if (inputWrap) inputWrap.style.display = 'none';
+              window.location.reload();
+            }, 1000);
+          } else {
+            if (msgEl) {
+              msgEl.style.color = '#EF4444';
+              msgEl.textContent = d.message || 'Could not save UPI ID.';
+            }
+          }
+        } catch (err) {
+          if (msgEl) {
+            msgEl.style.color = '#EF4444';
+            msgEl.textContent = 'Server communication error. Please try again.';
+          }
+        } finally {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Link UPI';
+        }
+      });
+    }
+
+    if (inputEl) {
+      inputEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') saveBtn?.click();
+      });
+    }
+
+    // Gemini API Key & Scaffolder State
+    let hasInternGeminiKey = {{ 'true' if has_intern_gemini_key else 'false' }};
+    let pendingScaffoldAction = false;
+
+    window.openGeminiKeyModal = function(fromScaffold) {
+      pendingScaffoldAction = !!fromScaffold;
+      const modal = document.getElementById('geminiKeyModal');
+      const input = document.getElementById('geminiKeyInput');
+      const fb = document.getElementById('geminiKeyFeedback');
+      if (fb) fb.style.display = 'none';
+      if (modal) modal.style.display = 'flex';
+      if (input) input.focus();
+    };
+
+    window.closeGeminiKeyModal = function() {
+      const modal = document.getElementById('geminiKeyModal');
+      if (modal) modal.style.display = 'none';
+      pendingScaffoldAction = false;
+    };
+
+    window.toggleGeminiKeyVisibility = function() {
+      const input = document.getElementById('geminiKeyInput');
+      if (input) {
+        input.type = input.type === 'password' ? 'text' : 'password';
+      }
+    };
+
+    window.saveGeminiKeyAction = async function() {
+      const input = document.getElementById('geminiKeyInput');
+      const btn = document.getElementById('btnSaveGeminiKey');
+      const fb = document.getElementById('geminiKeyFeedback');
+      const keyVal = (input ? input.value : '').trim();
+
+      if (!keyVal || keyVal.length < 15) {
+        if (fb) {
+          fb.style.display = 'block';
+          fb.style.background = 'rgba(239,68,68,0.15)';
+          fb.style.border = '1px solid rgba(239,68,68,0.35)';
+          fb.style.color = '#F87171';
+          fb.textContent = 'Please enter a valid Google Gemini API key (starts with AIzaSy...).';
+        }
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Testing &amp; Verifying...';
+      }
+      if (fb) {
+        fb.style.display = 'block';
+        fb.style.background = 'rgba(99,102,241,0.15)';
+        fb.style.border = '1px solid rgba(99,102,241,0.35)';
+        fb.style.color = '#A5B4FC';
+        fb.innerHTML = '<i class="fa-solid fa-microchip fa-spin"></i> Validating key with Google Gemini API...';
+      }
+
+      try {
+        const res = await fetch('/api/intern/gemini-key/save', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-Token': '{{ csrf_token() }}'
+          },
+          credentials: 'include',
+          body: JSON.stringify({ gemini_api_key: keyVal })
+        });
+        const data = await res.json();
+        if (res.ok && data.status === 'success') {
+          hasInternGeminiKey = true;
+          if (fb) {
+            fb.style.background = 'rgba(16,185,129,0.15)';
+            fb.style.border = '1px solid rgba(16,185,129,0.35)';
+            fb.style.color = '#34D399';
+            fb.innerHTML = '<i class="fa-solid fa-check"></i> ' + (data.message || 'Key saved successfully!');
+          }
+          setTimeout(function() {
+            closeGeminiKeyModal();
+            if (pendingScaffoldAction) {
+              triggerArticleScaffold(true);
+            } else {
+              window.location.reload();
+            }
+          }, 1000);
+        } else {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-shield-check"></i> Test &amp; Save Key';
+          }
+          if (fb) {
+            fb.style.background = 'rgba(239,68,68,0.15)';
+            fb.style.border = '1px solid rgba(239,68,68,0.35)';
+            fb.style.color = '#F87171';
+            fb.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + (data.message || 'Validation failed.');
+          }
+        }
+      } catch (err) {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-shield-check"></i> Test &amp; Save Key';
+        }
+        if (fb) {
+          fb.style.background = 'rgba(239,68,68,0.15)';
+          fb.style.border = '1px solid rgba(239,68,68,0.35)';
+          fb.style.color = '#F87171';
+          fb.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Network error verifying key.';
+        }
+      }
+    };
+
+    // Article Scaffolder Action
+    window.triggerArticleScaffold = async function(force) {
+      if (!hasInternGeminiKey) {
+        openGeminiKeyModal(true);
+        return;
+      }
+
+      const btn = document.getElementById('btnScaffoldArticle');
+      const fb = document.getElementById('scaffoldFeedback');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating Case Study...';
+      }
+      if (fb) {
+        fb.style.display = 'block';
+        fb.style.background = 'rgba(99,102,241,0.15)';
+        fb.style.border = '1px solid rgba(99,102,241,0.35)';
+        fb.style.color = '#A5B4FC';
+        fb.innerHTML = '<i class="fa-solid fa-sparkles fa-spin"></i> Synthesizing your GitHub repo, deployment, and rubric into an 800+ word verified Case Study with Gemini...';
+      }
+
+      try {
+        const res = await fetch('/intern/articles/scaffold', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-Token': '{{ csrf_token() }}'
+          },
+          credentials: 'include',
+          body: JSON.stringify({ force: !!force })
+        });
+        const data = await res.json();
+        if (data.status === 'key_required') {
+          openGeminiKeyModal(true);
+          return;
+        }
+        if (res.ok && data.status === 'success') {
+          if (fb) {
+            fb.style.background = 'rgba(16,185,129,0.15)';
+            fb.style.border = '1px solid rgba(16,185,129,0.35)';
+            fb.style.color = '#34D399';
+            fb.innerHTML = '<i class="fa-solid fa-check"></i> ' + (data.message || 'Draft created! Redirecting to editor...');
+          }
+          setTimeout(function() {
+            window.location.href = data.redirect_url || '/intern/articles';
+          }, 1000);
+        } else {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Auto-Generate Capstone Draft';
+          }
+          if (fb) {
+            fb.style.background = 'rgba(239,68,68,0.15)';
+            fb.style.border = '1px solid rgba(239,68,68,0.35)';
+            fb.style.color = '#F87171';
+            fb.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + (data.message || 'Error generating draft.');
+          }
+        }
+      } catch (e) {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Auto-Generate Capstone Draft';
+        }
+        if (fb) {
+          fb.style.background = 'rgba(239,68,68,0.15)';
+          fb.style.border = '1px solid rgba(239,68,68,0.35)';
+          fb.style.color = '#F87171';
+          fb.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Network error connecting to platform.';
+        }
+      }
+    };
+
+    // LinkedIn Profile Verification Actions
+    window.submitLinkedInProfile = async function() {
+      const input = document.getElementById('stipendLinkedinInput');
+      const btn = document.getElementById('btnSaveLinkedin');
+      const msgEl = document.getElementById('linkedinFeedbackMsg');
+      let url = (input ? input.value : '').trim();
+
+      if (!url) {
+        if (msgEl) {
+          msgEl.style.display = 'block';
+          msgEl.style.background = 'rgba(239,68,68,0.15)';
+          msgEl.style.border = '1px solid rgba(239,68,68,0.35)';
+          msgEl.style.color = '#F87171';
+          msgEl.textContent = 'Please enter your public LinkedIn profile URL.';
+        }
+        return;
+      }
+
+      // Prepend https:// if omitted
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+      }
+
+      if (!url.includes('linkedin.com/in/') && !url.includes('linkedin.com/mwlite/in/')) {
+        if (msgEl) {
+          msgEl.style.display = 'block';
+          msgEl.style.background = 'rgba(239,68,68,0.15)';
+          msgEl.style.border = '1px solid rgba(239,68,68,0.35)';
+          msgEl.style.color = '#F87171';
+          msgEl.textContent = 'Please enter a valid public LinkedIn profile URL (e.g. https://www.linkedin.com/in/yourname).';
+        }
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+      }
+      if (msgEl) {
+        msgEl.style.display = 'block';
+        msgEl.style.background = 'rgba(10,102,194,0.15)';
+        msgEl.style.border = '1px solid rgba(10,102,194,0.35)';
+        msgEl.style.color = '#38BDF8';
+        msgEl.innerHTML = '<i class="fa-solid fa-shield-check fa-spin"></i> Linking LinkedIn profile &amp; initiating verification...';
+      }
+
+      try {
+        const res = await fetch('/intern/linkedin/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-Token': '{{ csrf_token() }}'
+          },
+          credentials: 'include',
+          body: JSON.stringify({ linkedin_url: url })
+        });
+        const d = await res.json();
+        if (res.ok && d.status === 'success') {
+          if (d.verified) {
+            msgEl.style.background = 'rgba(16,185,129,0.15)';
+            msgEl.style.border = '1px solid rgba(16,185,129,0.35)';
+            msgEl.style.color = '#34D399';
+            msgEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + (d.message || 'Profile verified! DBERT credentials detected.');
+          } else {
+            msgEl.style.background = 'rgba(16,185,129,0.15)';
+            msgEl.style.border = '1px solid rgba(16,185,129,0.35)';
+            msgEl.style.color = '#34D399';
+            msgEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + (d.message || 'Profile linked successfully! Queued for verification scan.');
+          }
+          setTimeout(function() {
+            window.location.reload();
+          }, 1200);
+        } else {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-shield-check"></i> Save &amp; Verify';
+          }
+          if (msgEl) {
+            msgEl.style.background = 'rgba(239,68,68,0.15)';
+            msgEl.style.border = '1px solid rgba(239,68,68,0.35)';
+            msgEl.style.color = '#F87171';
+            msgEl.textContent = d.message || 'Error saving profile.';
+          }
+        }
+      } catch (err) {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-shield-check"></i> Save &amp; Verify';
+        }
+        if (msgEl) {
+          msgEl.style.background = 'rgba(239,68,68,0.15)';
+          msgEl.style.border = '1px solid rgba(239,68,68,0.35)';
+          msgEl.style.color = '#F87171';
+          msgEl.textContent = 'Network error connecting to platform.';
+        }
+      }
+    };
+
+    window.checkLinkedInNow = async function() {
+      const btn = document.getElementById('btnCheckLinkedinNow');
+      const msgEl = document.getElementById('linkedinFeedbackMsg');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Scanning...';
+      }
+      if (msgEl) {
+        msgEl.style.display = 'block';
+        msgEl.style.background = 'rgba(10,102,194,0.15)';
+        msgEl.style.border = '1px solid rgba(10,102,194,0.35)';
+        msgEl.style.color = '#38BDF8';
+        msgEl.innerHTML = '<i class="fa-solid fa-arrows-rotate fa-spin"></i> Scanning public profile for DBERT credentials...';
+      }
+
+      try {
+        const res = await fetch('/intern/linkedin/check-now', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': '{{ csrf_token() }}'
+          },
+          credentials: 'include'
+        });
+        const d = await res.json();
+        if (res.ok && d.status === 'success') {
+          if (d.verified) {
+            msgEl.style.background = 'rgba(16,185,129,0.15)';
+            msgEl.style.border = '1px solid rgba(16,185,129,0.35)';
+            msgEl.style.color = '#34D399';
+            msgEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + (d.message || 'Profile verified! DBERT credentials detected.');
+          } else {
+            msgEl.style.background = 'rgba(245,158,11,0.15)';
+            msgEl.style.border = '1px solid rgba(245,158,11,0.35)';
+            msgEl.style.color = '#FBBF24';
+            msgEl.innerHTML = '<i class="fa-solid fa-circle-info"></i> ' + (d.message || 'Public profile re-scanned.');
+          }
+          setTimeout(function() {
+            window.location.reload();
+          }, 1200);
+        } else {
+          msgEl.style.background = 'rgba(239,68,68,0.15)';
+          msgEl.style.border = '1px solid rgba(239,68,68,0.35)';
+          msgEl.style.color = '#F87171';
+          msgEl.textContent = d.message || 'Error checking profile.';
+        }
+      } catch (err) {
+        msgEl.style.background = 'rgba(239,68,68,0.15)';
+        msgEl.style.border = '1px solid rgba(239,68,68,0.35)';
+        msgEl.style.color = '#F87171';
+        msgEl.textContent = 'Network error checking profile.';
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Re-scan Public LinkedIn Now';
+        }
+      }
+    };
+
+    // Experience Snippet Modal Controls
+    window.openExperienceSnippetModal = function() {
+      const modal = document.getElementById('experienceSnippetModal');
+      if (modal) modal.style.display = 'flex';
+    };
+
+    window.closeExperienceSnippetModal = function() {
+      const modal = document.getElementById('experienceSnippetModal');
+      if (modal) modal.style.display = 'none';
+    };
+
+    window.copySnippetToClipboard = function() {
+      const container = document.getElementById('snippetTextContainer');
+      const feedback = document.getElementById('copySnippetFeedback');
+      const btn = document.getElementById('btnCopySnippet');
+      if (!container) return;
+
+      const text = container.innerText || container.textContent;
+      navigator.clipboard.writeText(text).then(function() {
+        if (feedback) feedback.style.display = 'block';
+        if (btn) {
+          btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+          setTimeout(function() {
+            btn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy to Clipboard';
+          }, 2500);
+        }
+      }).catch(function() {
+        // Fallback for older browsers
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (feedback) feedback.style.display = 'block';
+      });
+    };
+
+    // Toggle LinkedIn Update Input
+    window.showUpdateLinkedin = function() {
+      const wrap = document.getElementById('stipendLinkedinInputWrap');
+      const input = document.getElementById('stipendLinkedinInput');
+      if (wrap) {
+        const isHidden = (wrap.style.display === 'none' || wrap.style.display === '');
+        wrap.style.display = isHidden ? 'block' : 'none';
+        if (isHidden && input) input.focus();
+      }
+    };
+
+    // DOMContentLoaded Fallback Binding
+    document.addEventListener('DOMContentLoaded', function() {
+      const btnShowUpdate = document.getElementById('btnShowUpdateLinkedin');
+      if (btnShowUpdate) btnShowUpdate.addEventListener('click', window.showUpdateLinkedin);
+
+      const btnCloseExp = document.getElementById('btnCloseExpModal');
+      if (btnCloseExp) btnCloseExp.addEventListener('click', window.closeExperienceSnippetModal);
+
+      const btnCopy = document.getElementById('btnCopySnippet');
+      if (btnCopy) btnCopy.addEventListener('click', window.copySnippetToClipboard);
+
+      const btnCloseGemini = document.getElementById('btnCloseGeminiModal');
+      if (btnCloseGemini) btnCloseGemini.addEventListener('click', window.closeGeminiKeyModal);
+
+      const btnCancelGemini = document.getElementById('btnCancelGeminiKey');
+      if (btnCancelGemini) btnCancelGemini.addEventListener('click', window.closeGeminiKeyModal);
+
+      const btnToggleKey = document.getElementById('btnToggleGeminiKey');
+      if (btnToggleKey) btnToggleKey.addEventListener('click', window.toggleGeminiKeyVisibility);
+
+      const btnSaveKey = document.getElementById('btnSaveGeminiKey');
+      if (btnSaveKey) btnSaveKey.addEventListener('click', window.saveGeminiKeyAction);
+    });
+  })();
+</script>
+
+<!-- Experience Snippet Modal -->
+<div id="experienceSnippetModal" class="portal-modal-backdrop">
+  <div style="background:#0F172A;border:1px solid rgba(99,102,241,0.4);border-radius:16px;max-width:620px;width:100%;padding:1.75rem;box-shadow:0 20px 50px rgba(0,0,0,0.7);position:relative;">
+    <button type="button" id="btnCloseExpModal" data-act-click="closeExperienceSnippetModal" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:#94A3B8;font-size:1.5rem;cursor:pointer;padding:0.25rem 0.5rem;">&times;</button>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;">
+      <i class="fa-brands fa-linkedin" style="color:#0A66C2;font-size:1.5rem;"></i>
+      <h3 style="color:#fff;margin:0;font-size:1.15rem;font-weight:800;">Official DBERT Experience Snippet</h3>
+    </div>
+    <p style="color:#CBD5E1;font-size:0.85rem;margin:0 0 1rem;line-height:1.5;">
+      Copy and paste this snippet into the <strong>Experience</strong> section of your LinkedIn profile. This ensures our verification daemon detects your credentials immediately.
+    </p>
+    <div style="background:#070A12;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:1rem;margin-bottom:1.25rem;font-family:monospace;font-size:0.8125rem;color:#E2E8F0;max-height:220px;overflow-y:auto;white-space:pre-wrap;line-height:1.6;" id="snippetTextContainer">Position Title: {{ intern.domain or ver_info.domain or 'Engineering' }} Intern
+Company Name: DBERT
+Employment Type: Internship
+Location: Remote (New Delhi, India)
+Location Type: Remote
+Dates: {{ comp_info.joining_date or 'October 2026' }} – {{ comp_info.completion_date_display or 'Present' }}
+
+Key Deliverables & Responsibilities:
+• Completed an intensive 60-day engineering sprint fellowship at DBERT focusing on production architecture and clean code.
+• Delivered core capstone project: {{ existing_submission.task_title if existing_submission else (ver_info.domain ~ ' System') }}.
+• Production Codebase: {{ existing_submission.github_repo_url if (existing_submission and existing_submission.github_repo_url) else 'https://github.com/dbert' }}
+• Live Deployment: {{ existing_submission.live_demo_url if (existing_submission and existing_submission.live_demo_url) else 'https://dbert.in' }}
+• Official Credential ID: {{ ver_info.cert_id or ver_info.certId or 'Pending Verification' }}
+• Verified Dossier: https://dbert.in/verify/{{ ver_info.cert_id or ver_info.certId }}</div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;align-items:center;">
+      <a href="https://www.linkedin.com/in/me/details/experience/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:rgba(255,255,255,0.08);color:#E2E8F0;font-size:13px;font-weight:600;text-decoration:none;">
+        <span>Open LinkedIn Experience ↗</span>
+      </a>
+      <button type="button" id="btnCopySnippet" data-act-click="copySnippetToClipboard" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;background:linear-gradient(135deg, #10B981, #059669);border:none;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">
+        <i class="fa-solid fa-copy"></i> Copy to Clipboard
+      </button>
+    </div>
+    <div id="copySnippetFeedback" style="display:none;color:#34D399;font-size:12px;margin-top:8px;text-align:right;">
+      ✓ Copied to clipboard! Now paste into LinkedIn.
+    </div>
+  </div>
+</div>
+
+<!-- Gemini Key Configuration Modal -->
+<div id="geminiKeyModal" class="portal-modal-backdrop">
+  <div style="background:#0F172A;border:1px solid rgba(99,102,241,0.4);border-radius:16px;max-width:580px;width:100%;padding:1.75rem;box-shadow:0 20px 50px rgba(0,0,0,0.7);position:relative;">
+    <button type="button" id="btnCloseGeminiModal" data-act-click="closeGeminiKeyModal" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:#94A3B8;font-size:1.5rem;cursor:pointer;padding:0.25rem 0.5rem;">&times;</button>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;">
+      <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg, #6366F1, #38BDF8);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;">
+        <i class="fa-solid fa-key"></i>
+      </div>
+      <div>
+        <h3 style="color:#fff;margin:0;font-size:1.15rem;font-weight:800;">Google Gemini 2.0 Free Developer Key</h3>
+        <p style="color:#94A3B8;font-size:0.75rem;margin:2px 0 0;">Universal AI Engine for Case Studies, Code Reviews &amp; ATS Resume Audits</p>
+      </div>
+    </div>
+    <div style="background:rgba(15,23,42,0.8);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:0.9rem 1.1rem;margin-bottom:1rem;font-size:0.8125rem;color:#CBD5E1;line-height:1.55;">
+      <p style="margin:0 0 6px;"><strong style="color:#38BDF8;">Why is this needed?</strong> Google provides every developer with a <strong>100% free Gemini API key</strong> (up to 15 requests/min with zero cost). We use your key to synthesize your GitHub repository into an executive 800+ word technical Case Study, evaluate code, and run ATS resume scans.</p>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+        <span style="color:#A5B4FC;font-weight:700;">Step 1:</span>
+        <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;color:#38BDF8;font-weight:700;text-decoration:underline;">
+          <span>Get Free Key in 30 Seconds from Google AI Studio</span> <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px;"></i>
+        </a>
+      </div>
+    </div>
+    
+    <div style="margin-bottom:1rem;">
+      <label style="display:block;color:#E2E8F0;font-size:0.8125rem;font-weight:700;margin-bottom:6px;">Step 2: Paste Your Gemini API Key (starts with AIzaSy...)</label>
+      <input type="password" id="geminiKeyInput" placeholder="AIzaSy..." style="width:100%;box-sizing:border-box;background:#070A12;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:10px 14px;color:#fff;font-family:monospace;font-size:0.875rem;outline:none;" />
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+        <span style="font-size:0.75rem;color:#94A3B8;">Encrypted at rest with Fernet AES-128. Never shared.</span>
+        <button type="button" id="btnToggleGeminiKey" data-act-click="toggleGeminiKeyVisibility" style="background:none;border:none;color:#38BDF8;font-size:0.75rem;cursor:pointer;padding:0;">Show / Hide</button>
+      </div>
+    </div>
+
+    <div id="geminiKeyFeedback" style="display:none;margin-bottom:1rem;font-size:0.8125rem;padding:8px 12px;border-radius:6px;"></div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;align-items:center;">
+      <button type="button" id="btnCancelGeminiKey" data-act-click="closeGeminiKeyModal" style="padding:8px 16px;border-radius:8px;background:rgba(255,255,255,0.08);border:none;color:#CBD5E1;font-size:13px;font-weight:600;cursor:pointer;">
+        Cancel
+      </button>
+      <button type="button" id="btnSaveGeminiKey" data-act-click="saveGeminiKeyAction" style="display:inline-flex;align-items:center;gap:6px;padding:8px 20px;border-radius:8px;background:linear-gradient(135deg, #10B981, #059669);border:none;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">
+        <i class="fa-solid fa-shield-check"></i> Test &amp; Save Key
+      </button>
+    </div>
+  </div>
+</div>
+</body>
+
+</html>

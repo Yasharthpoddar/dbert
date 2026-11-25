@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% set page_title_full = "Capstone Project Review Queue — Staff Portal" %}
+{% include "_head.html" %}
+</head>
+<body class="pg-staff-project-queue has-staff-sidebar">
+{% set active_page = 'staff_projects' %}
+{% include '_staff_sidebar.html' %}
+
+
+    <div class="queue-container">
+        <header class="header-bar">
+            <div>
+                <h1>Capstone Project Review Queue</h1>
+                <div style="font-size: 0.875rem; color: var(--tx-muted);">Staff: {{ staff.name }}</div>
+            </div>
+            <a href="/staff/dashboard" style="color: var(--tx-muted); text-decoration: none; font-size: 0.9rem;">← Back to Dashboard</a>
+        </header>
+
+        <div class="filter-tabs">
+            <a href="/staff/projects?status=pending" class="tab-btn {% if current_status == 'pending' %}active{% endif %}">Pending Review</a>
+            <a href="/staff/projects?status=approved" class="tab-btn {% if current_status == 'approved' %}active{% endif %}">Approved</a>
+            <a href="/staff/projects?status=rejected" class="tab-btn {% if current_status == 'rejected' %}active{% endif %}">Rejected</a>
+            <a href="/staff/projects?status=changes_requested" class="tab-btn {% if current_status == 'changes_requested' %}active{% endif %}">Changes requested</a>
+        </div>
+
+        {% if submissions %}
+            {% for sub in submissions %}
+            <div class="card submission-card" id="subCard_{{ sub.id }}">
+                <div class="sub-header">
+                    <div>
+                        <h3 class="sub-title">{{ sub.project_title }}</h3>
+                        <div class="meta-line">
+                            Intern: <strong>{{ sub.intern_name }}</strong> ({{ sub.intern_email }}) • Course: <strong>{{ sub.course_title }}</strong> • Submitted: {{ sub.created_at }}
+                        </div>
+                    </div>
+                    <span class="meta-line" style="text-transform: uppercase; font-weight: 700;">{{ sub.status }}</span>
+                </div>
+
+                {% if sub.github_repo_url.startswith('https://github.com/') %}<a href="{{ sub.github_repo_url }}" target="_blank" rel="noopener noreferrer" class="repo-link">
+                    📦 GitHub Repo: {{ sub.github_repo_url }} ↗
+                </a>{% endif %}
+
+                <div class="desc-box">{{ sub.project_description }}</div>
+
+                {% if sub.status == 'pending' %}
+                <fieldset style="margin-block:1rem; padding:.8rem;">
+                    <legend>Project rubric</legend>
+                    {% for key in ('implementation', 'verification', 'documentation') %}
+                    <label for="projectRubric{{ sub.id }}-{{ key }}" style="display:block;margin-top:.4rem;">{{ key|title }}</label>
+                    <select id="projectRubric{{ sub.id }}-{{ key }}" data-project-criterion="{{ key }}">
+                        <option value="">Select a rating</option>
+                        <option>Meets expectations</option><option>Needs revision</option>
+                    </select>
+                    {% endfor %}
+                    <label for="projectFeedback{{ sub.id }}" style="display:block;margin-top:.6rem;">Feedback shared with the learner</label>
+                    <textarea id="projectFeedback{{ sub.id }}" rows="3" maxlength="2000" style="max-width:100%;"></textarea>
+                </fieldset>
+                <div class="actions-bar">
+                    <button class="btn-reject" data-act-click="makeDecision" data-arg-click='[{{ sub.id|tojson }}, "rejected"]'>Reject Submission</button>
+                    <button class="btn btn-secondary" data-act-click="makeDecision" data-arg-click='[{{ sub.id|tojson }}, "changes_requested"]'>Request changes</button>
+                    <button class="btn-approve" data-act-click="makeDecision" data-arg-click='[{{ sub.id|tojson }}, "approved"]'>✓ Approve & Issue Verified Certificate</button>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="card" style="padding: 2.5rem; text-align: center;">
+                <p style="color: var(--tx-muted); margin: 0;">No capstone project submissions found for status '{{ current_status }}'.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <script nonce="{{ csp_nonce() }}">
+        function makeDecision(subId, decision) {
+            if (!confirm(`Are you sure you want to mark submission #${subId} as ${decision}?`)) return;
+            const card = document.getElementById(`subCard_${subId}`);
+            const rubric = Object.fromEntries(Array.from(card.querySelectorAll('[data-project-criterion]'))
+                .filter(input => input.value).map(input => [input.dataset.projectCriterion, input.value]));
+            const feedback = document.getElementById(`projectFeedback${subId}`).value.trim();
+
+            fetch(`/staff/projects/${subId}/decision`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ decision, rubric, feedback })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    document.getElementById(`subCard_${subId}`).remove();
+                } else {
+                    alert(data.message || 'Error executing decision');
+                }
+            })
+            .catch(() => alert('Server error during decision submission.'));
+        }
+    </script>
+</body>
+</html>

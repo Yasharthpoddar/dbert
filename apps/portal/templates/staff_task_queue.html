@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% set page_title_full = "Task Review Queue — Staff Portal" %}
+{% include "_head.html" %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/staff-task-queue.css') }}">
+</head>
+<body class="pg-staff-task-queue has-staff-sidebar">
+{% set active_page = 'staff_tasks' %}
+{% include '_staff_sidebar.html' %}
+
+    <div class="queue-container">
+        <header class="header-bar">
+            <div>
+                <h1>Open Task Review Queue</h1>
+                <div style="font-size: 0.875rem; color: var(--tx-muted);">Staff: {{ staff.name }}</div>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <button data-act-click="openCreateModal" class="btn-approve" style="background: linear-gradient(135deg, #7c3aed, #3b82f6); border: none; padding: 0.65rem 1.25rem;">+ Create New Task</button>
+                <a href="/staff/dashboard" style="color: var(--tx-muted); text-decoration: none; font-size: 0.9rem;">← Back to Dashboard</a>
+            </div>
+        </header>
+
+                <!-- Stipend & AI Health Bar -->
+        <div id="stipendHealthBanner" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem; background: rgba(30, 27, 75, 0.5); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #10B981;" id="healthDot"></div>
+                <div style="font-size: 0.875rem; color: #E2E8F0;">
+                    <strong>AI Pre-Screening Engine:</strong> <span id="healthStatusText" style="color: #A5B4FC;">Checking...</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <input type="password" id="geminiKeyInput" placeholder="Enter GEMINI_API_KEY..." style="background: rgba(0,0,0,0.4); border: 1px solid #475569; border-radius: 8px; padding: 0.4rem 0.75rem; color: #fff; font-size: 0.8rem; width: 220px;">
+                <button type="button" data-act-click="saveGeminiKey" style="background: #4F46E5; color: #fff; border: none; border-radius: 8px; padding: 0.4rem 0.85rem; font-size: 0.8rem; font-weight: bold; cursor: pointer;">Save &amp; Test Key</button>
+            </div>
+        </div>
+
+        <script nonce="{{ csp_nonce() }}">
+        function checkStipendHealth() {
+            fetch('/admin/api/stipend-health')
+                .then(r => r.json())
+                .then(d => {
+                    const dot = document.getElementById('healthDot');
+                    const txt = document.getElementById('healthStatusText');
+                    if (d.gemini && d.gemini.healthy) {
+                        dot.style.background = '#10B981';
+                        txt.innerHTML = '<span style="color:#10B981; font-weight:bold;">Active & Online</span> (' + (d.gemini.masked_key || 'Key configured') + ')';
+                    } else if (d.gemini && d.gemini.configured) {
+                        dot.style.background = '#F59E0B';
+                        txt.innerHTML = '<span style="color:#F59E0B; font-weight:bold;">Key Warning:</span> ' + (d.gemini.message || 'Verification needed');
+                    } else {
+                        dot.style.background = '#EF4444';
+                        txt.innerHTML = '<span style="color:#EF4444; font-weight:bold;">Key Missing:</span> Pre-screening offline. Add key to right.';
+                    }
+                }).catch(() => {
+                    document.getElementById('healthStatusText').textContent = 'Telemetry offline';
+                });
+        }
+        function saveGeminiKey() {
+            const key = document.getElementById('geminiKeyInput').value.trim();
+            if (!key) { alert('Please enter a Gemini API key.'); return; }
+            fetch('/admin/api/stipend-health/set-gemini-key', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': (document.querySelector('meta[name="csrf-token"]') || {}).content || '' },
+                body: JSON.stringify({ api_key: key })
+            }).then(r => r.json()).then(d => {
+                if (d.status === 'success') {
+                    alert('Success: ' + d.message);
+                    document.getElementById('geminiKeyInput').value = '';
+                    checkStipendHealth();
+                } else {
+                    alert('Error: ' + (d.message || 'Key validation failed.'));
+                }
+            }).catch(e => alert('Failed to save key: ' + e));
+        }
+        document.addEventListener('DOMContentLoaded', checkStipendHealth);
+        </script>
+
+        <dl class="task-queue-overview" aria-label="Pending review summary">
+            <div class="card"><dt>Pending reviews</dt><dd>{{ queue.pending_count }}</dd></div>
+            <div class="card"><dt>Oldest pending submission</dt><dd>{{ queue.oldest_pending_age or '—' }}</dd></div>
+        </dl>
+
+        <nav class="filter-tabs" aria-label="Review status">
+            {% for value, label in queue.status_options %}
+                <a href="{{ url_for('staff_task_queue', status=value, domain=queue.domain, age=queue.age) }}"
+                    class="tab-btn{% if queue.status == value %} active{% endif %}"
+                    {% if queue.status == value %}aria-current="page"{% endif %}>{{ label }}</a>
+            {% endfor %}
+        </nav>
+
+        <form method="get" action="{{ url_for('staff_task_queue') }}" class="task-queue-filters" aria-label="Filter submissions">
+            <input type="hidden" name="status" value="{{ queue.status }}">
+            <label class="task-queue-field">Domain
+                <select name="domain" class="form-control">
+                    <option value="">All domains</option>
+                    {% for domain in queue.domains %}
+                        <option value="{{ domain }}" {% if domain == queue.domain %}selected{% endif %}>{{ domain }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label class="task-queue-field">{% if queue.status == 'pending' %}Waiting for at least{% else %}Submitted at least{% endif %}
+                <select name="age" class="form-control">
+                    {% for value, label in queue.age_options %}
+                        <option value="{{ value }}" {% if value == queue.age %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <button type="submit" class="btn-approve">Apply filters</button>
+            {% if queue.domain or queue.age %}
+                <a href="{{ url_for('staff_task_queue', status=queue.status) }}">Clear filters</a>
+            {% endif %}
+        </form>
+        <p class="task-queue-count">{{ queue.total }} matching {{ 'submission' if queue.total == 1 else 'submissions' }}, oldest first</p>
+
+        {% if submissions %}
+            {% for sub in submissions %}
+            <div class="card submission-card" id="subCard_{{ sub.id }}">
+                <div class="sub-header">
+                    <div>
+                        <h3 class="sub-title">{{ sub.task_title }}</h3>
+                        <div style="margin-top: 4px; margin-bottom: 6px;">
+                            {% if sub.task_type == 'stipend_milestone' or sub.task_category == 'stipend_milestone' %}
+                            <span class="badge-type" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid #10B981; font-weight: bold;">🎓 STIPEND CAPSTONE (₹5,000)</span>
+                            {% if sub.article_status == 'PUBLISHED' %}
+                            <a href="https://dbert.in/blog/{{ sub.article_url|default('')|replace('https://dbert.in/blog/', '') or sub.article_title|lower|replace(' ', '-') }}" target="_blank" rel="noopener" class="badge-type" style="background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid #34D399; font-weight: bold; text-decoration: none;">
+                                ✓ Case Study Published ↗
+                            </a>
+                            {% elif sub.article_status == 'PENDING_REVIEW' %}
+                            <a href="/admin/articles" class="badge-type" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid #F59E0B; font-weight: bold; text-decoration: none;">
+                                ⏳ Case Study In Editorial Review &rarr;
+                            </a>
+                            {% elif sub.article_status == 'DRAFT' %}
+                            <span class="badge-type" style="background: rgba(148, 163, 184, 0.2); color: #94A3B8; border: 1px solid #94A3B8;">
+                                ✎ Case Study Drafted (Unsubmitted)
+                            </span>
+                            {% else %}
+                            <span class="badge-type" style="background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.4);">
+                                ⚠ No Case Study Yet
+                            </span>
+                            {% endif %}
+                            {% elif sub.task_type == 'domain_specific' %}
+                            <span class="badge-type badge-domain">🎯 Domain: {{ sub.target_domain or 'Specific' }}</span>
+                            {% else %}
+                            <span class="badge-type badge-general">🌐 General</span>
+                            {% endif %}
+
+                            {% if sub.ai_evaluation_score %}
+                            <span class="badge-type" style="background: rgba(99, 102, 241, 0.2); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.4); font-weight: bold;">
+                                🤖 AI Pre-Screen: {{ sub.ai_evaluation_score }}/100 ({{ sub.ai_evaluation_status }})
+                            </span>
+                            {% endif %}
+                            
+                            {% if sub.payment_type == 'unpaid' %}
+                            <span class="badge-type badge-unpaid">🌱 Unpaid Practice</span>
+                            {% else %}
+                            <span class="badge-type badge-paid">🪙 Paid Bounty</span>
+                            {% endif %}
+                            
+                            <span class="badge-type" style="background: rgba(255,255,255,0.06); color: var(--tx-muted);">Format: {{ sub.submission_type or 'url' }}</span>
+                        </div>
+                        <div class="meta-line">
+                            Intern: <strong>{{ sub.intern_name }}</strong> ({{ sub.intern_email }}) • Submitted: {{ sub.created_at }}
+                            {% if sub.status == 'pending' and sub.age_label %}
+                                <span class="task-queue-age">&middot; Waiting {{ sub.age_label|lower }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if sub.payment_type == 'unpaid' %}
+                    <span class="coin-bounty" style="background: rgba(156,163,175,0.15); border-color: #9CA3AF; color: #9CA3AF;">🌱 0 Coins</span>
+                    {% else %}
+                    <span class="coin-bounty">🪙 +{{ sub.coin_reward }} Coins</span>
+                    {% endif %}
+                </div>
+
+                <div class="content-box">
+                    {{ sub.submission_content }}
+                    
+                    {% if sub.github_repo_url %}
+                    <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border);">
+                        💻 <strong>GitHub Repository:</strong> 
+                        <a href="{{ sub.github_repo_url }}" target="_blank" style="color: #818CF8; text-decoration: underline; margin-left: 6px;">{{ sub.github_repo_url }} →</a>
+                    </div>
+                    {% endif %}
+
+                    {% if sub.live_demo_url %}
+                    <div style="margin-top: 6px;">
+                        🌐 <strong>Live Deployment / Demo:</strong> 
+                        <a href="{{ sub.live_demo_url }}" target="_blank" style="color: #34D399; text-decoration: underline; margin-left: 6px;">{{ sub.live_demo_url }} →</a>
+                    </div>
+                    {% endif %}
+
+                    {% if sub.submission_file or sub.report_file_url %}
+                    <div style="margin-top: 6px;">
+                        📁 <strong>Technical Report Attachment:</strong> 
+                        <a href="{{ sub.submission_file or sub.report_file_url }}" target="_blank" style="color: #60A5FA; text-decoration: underline; margin-left: 6px;">Download / View Report →</a>
+                    </div>
+                    {% endif %}
+
+                    {% if sub.ai_evaluation_notes %}
+                    <div style="margin-top: 10px; padding: 10px; background: rgba(99, 102, 241, 0.08); border-left: 3px solid #6366F1; border-radius: 4px; font-size: 0.85rem; color: #CBD5E1;">
+                        <strong>🤖 AI Pre-Screening Rubric Notes:</strong> {{ sub.ai_evaluation_notes }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if sub.review_history %}
+                <details class="task-queue-history">
+                    <summary>Review history ({{ sub.review_history|length }})</summary>
+                    <ol>
+                        {% for review in sub.review_history %}
+                            <li><strong>{{ review.decision|capitalize }}</strong> by {{ review.reviewer or 'Staff' }}
+                                {% if review.created_at %}&middot; <time datetime="{{ review.created_at }}">{{ review.created_at }}</time>{% endif %}
+                                {% if review.reason_code %}&middot; {{ review.reason_code }}{% endif %}</li>
+                        {% endfor %}
+                    </ol>
+                </details>
+                {% endif %}
+
+                {% if sub.status == 'pending' %}
+                <div class="actions-bar">
+                    <button class="btn-reject" data-act-click="makeTaskDecision" data-arg-click='[{{ sub.id|tojson }}, "rejected"]'>Reject Work</button>
+                    <button class="btn-approve" data-act-click="makeTaskDecision" data-arg-click='[{{ sub.id|tojson }}, "approved"]'>
+                        ✓ Approve {% if sub.payment_type != 'unpaid' %}&amp; Credit +{{ sub.coin_reward }} Coins{% endif %}
+                    </button>
+                </div>
+                {% else %}
+                <div style="font-size: 0.85rem; color: var(--tx-muted); text-align: right;">
+                    Status: <strong style="text-transform: uppercase;">{{ sub.status }}</strong> 
+                    {% if sub.coins_awarded > 0 %}(+{{ sub.coins_awarded }} Coins Credited){% endif %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="card" style="padding: 2.5rem; text-align: center;">
+                <p style="color: var(--tx-muted); margin: 0;">No submissions match these filters.</p>
+            </div>
+        {% endif %}
+
+        {% if queue.page_count > 1 %}
+        <nav class="task-queue-pages" aria-label="Submission pages">
+            {% if queue.page > 1 %}
+                <a href="{{ url_for('staff_task_queue', status=queue.status, domain=queue.domain, age=queue.age, page=queue.page - 1) }}">Previous</a>
+            {% endif %}
+            <span>Page {{ queue.page }} of {{ queue.page_count }}</span>
+            {% if queue.page < queue.page_count %}
+                <a href="{{ url_for('staff_task_queue', status=queue.status, domain=queue.domain, age=queue.age, page=queue.page + 1) }}">Next</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+    </div>
+
+    <!-- Create Task Modal -->
+    <div class="modal-overlay" id="createTaskModal" role="dialog" aria-modal="true" aria-labelledby="createTaskTitle">
+        <div class="modal-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 id="createTaskTitle" style="margin: 0; font-family: var(--f-display); color: var(--tx-head); font-size: 1.3rem;">Create New Task / Bounty</h2>
+                <button data-act-click="closeCreateModal" aria-label="Close dialog" style="background: none; border: none; color: var(--tx-muted); font-size: 1.2rem; cursor: pointer;">✕</button>
+            </div>
+
+            <form id="createTaskForm" data-act-submit="submitCreateTask" data-arg-submit='["$event"]'>
+                <div class="form-group">
+                    <label for="createTitle">Task Title *</label>
+                    <input type="text" id="createTitle" class="form-control" placeholder="e.g. Build a Responsive Landing Page" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="createDesc">Short Description *</label>
+                    <textarea id="createDesc" class="form-control" rows="2" placeholder="Brief summary of the task objective..." required></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="createTaskType">Task Scope / Audience *</label>
+                        <select id="createTaskType" class="form-control" data-act-change="toggleDomainField">
+                            <option value="general">🌐 General (Open to All Interns)</option>
+                            <option value="domain_specific">🎯 Domain-Specific</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="domainGroup" style="display: none;">
+                        <label for="createTargetDomain">Target Domain *</label>
+                        <select id="createTargetDomain" class="form-control">
+                            {% for d in valid_domains %}
+                            <option value="{{ d }}">{{ d }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="createPaymentType">Payment / Reward Type *</label>
+                        <select id="createPaymentType" class="form-control" data-act-change="toggleCoinField">
+                            <option value="paid">🪙 Paid Bounty (Rewards Coins)</option>
+                            <option value="unpaid">🌱 Unpaid Practice (0 Coins)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="coinGroup">
+                        <label for="createCoinReward">Coin Bounty Reward *</label>
+                        <input type="number" id="createCoinReward" class="form-control" value="50" min="1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="createSubmissionType">Required Submission Format *</label>
+                    <select id="createSubmissionType" class="form-control">
+                        <option value="url">🔗 URL Link (GitHub / Web App Link)</option>
+                        <option value="file">📁 File Upload (PDF, Zip, Image, Document)</option>
+                        <option value="text">📝 Text Response / Code Snippet</option>
+                        <option value="any">🔀 Any Format (URL, File, or Text)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="createInstructions">Detailed Instructions</label>
+                    <textarea id="createInstructions" class="form-control" rows="3" placeholder="Detailed step-by-step instructions for interns..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="createRubric">Evaluation Rubric</label>
+                    <textarea id="createRubric" class="form-control" rows="2" placeholder="Criteria for staff approval (e.g. Clean code, working demo)..."></textarea>
+                </div>
+
+
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+                    <button type="button" data-act-click="closeCreateModal" class="tab-btn">Cancel</button>
+                    <button type="submit" class="btn-approve" style="background: linear-gradient(135deg, #7c3aed, #3b82f6); border: none; padding: 0.65rem 1.5rem;">Create Task →</button>
+                </div>
+            </form>
+            <div id="createMsg" style="margin-top: 1rem; font-size: 0.9rem; display: none;"></div>
+        </div>
+    </div>
+
+    <script nonce="{{ csp_nonce() }}">
+        function openCreateModal() {
+            document.getElementById('createTaskModal').style.display = 'flex';
+        }
+        function closeCreateModal() {
+            document.getElementById('createTaskModal').style.display = 'none';
+        }
+        function toggleDomainField() {
+            const val = document.getElementById('createTaskType').value;
+            document.getElementById('domainGroup').style.display = (val === 'domain_specific') ? 'block' : 'none';
+        }
+        function toggleCoinField() {
+            const val = document.getElementById('createPaymentType').value;
+            document.getElementById('coinGroup').style.display = (val === 'unpaid') ? 'none' : 'block';
+        }
+
+        function submitCreateTask(e) {
+            e.preventDefault();
+            const msg = document.getElementById('createMsg');
+            msg.style.display = 'block';
+            msg.style.color = 'var(--tx-muted)';
+            msg.textContent = 'Creating task...';
+
+            const payload = {
+                title: document.getElementById('createTitle').value,
+                description: document.getElementById('createDesc').value,
+                task_type: document.getElementById('createTaskType').value,
+                target_domain: document.getElementById('createTargetDomain').value,
+                payment_type: document.getElementById('createPaymentType').value,
+                coin_reward: document.getElementById('createCoinReward').value,
+                submission_type: document.getElementById('createSubmissionType').value,
+                instructions: document.getElementById('createInstructions').value,
+                rubric: document.getElementById('createRubric').value,
+            };
+
+            fetch('/staff/tasks/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    msg.style.color = '#10B981';
+                    msg.textContent = data.message;
+                    setTimeout(() => window.location.reload(), 1200);
+                } else {
+                    msg.style.color = '#F43F5E';
+                    msg.textContent = data.message || 'Failed to create task.';
+                }
+            })
+            .catch(() => {
+                msg.style.color = '#F43F5E';
+                msg.textContent = 'Server error during task creation.';
+            });
+        }
+
+        function makeTaskDecision(subId, decision) {
+            if (!confirm(`Are you sure you want to mark task submission #${subId} as ${decision}?`)) return;
+
+            fetch(`/staff/tasks/${subId}/decision`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ decision: decision })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    document.getElementById(`subCard_${subId}`).remove();
+                } else {
+                    alert(data.message || 'Error executing decision');
+                }
+            })
+            .catch(() => alert('Server error during decision submission.'));
+        }
+    </script>
+</body>
+</html>

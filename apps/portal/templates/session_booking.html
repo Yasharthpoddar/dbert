@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% set page_title_full = "Mentor Guidance Sessions & Calendar Booking — DBERT LMS" %}
+{% include "_head.html" %}
+
+<style nonce="{{ csp_nonce() }}">
+  /* ==========================================================================
+     DBERT LMS — GROUP MENTORSHIP & CASCADING CALENDAR BOOKING
+     Self-contained, CSP Nonce Compliant, Zero Sidebar Overlap
+     ========================================================================== */
+  .booking-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem 0.5rem 4rem;
+  }
+
+  /* 1. Hero Banner */
+  .mentor-hero {
+    background: linear-gradient(135deg, #0A0D17 0%, #171E36 50%, #0F172A 100%);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 20px;
+    padding: 2.25rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 25px rgba(212, 175, 55, 0.1);
+  }
+
+  .mentor-hero::after {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .mentor-hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    color: #F5E096;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 0.75rem;
+  }
+
+  .mentor-hero-title {
+    font-size: 1.85rem;
+    font-weight: 850;
+    color: #FFFFFF;
+    letter-spacing: -0.5px;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+
+  .mentor-hero-desc {
+    font-size: 0.9375rem;
+    color: #94A3B8;
+    max-width: 620px;
+    line-height: 1.6;
+  }
+
+  .mentor-hours-card {
+    background: rgba(14, 19, 31, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 1.25rem 1.65rem;
+    border-radius: 16px;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    flex-shrink: 0;
+  }
+
+  .hours-label {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94A3B8;
+    font-weight: 700;
+  }
+
+  .hours-val {
+    font-size: 1.25rem;
+    font-weight: 850;
+    color: #FFFFFF;
+    margin: 0.35rem 0 0.15rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .hours-sub {
+    font-size: 0.75rem;
+    color: #D4AF37;
+    font-weight: 600;
+  }
+
+  /* 2. Cascading Booking Console */
+  .booking-console-card {
+    background: #0E131F;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2.25rem;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #D4AF37 0%, #F5E096 100%);
+    color: #07090E;
+    font-weight: 900;
+    font-size: 0.8125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0;
+  }
+
+  /* Step 1: Filter Bars */
+  .filter-bar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .domain-pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  .domain-pill {
+    padding: 0.55rem 1.1rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94A3B8;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+
+  .domain-pill:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .domain-pill.active {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: #D4AF37;
+    color: #F5E096;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
+  }
+
+  .mentor-selector-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .mentor-select-label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .mentor-dropdown {
+    background: #07090E;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 0.65rem 1.25rem;
+    color: #FFFFFF;
+    font-size: 0.875rem;
+    font-weight: 700;
+    outline: none;
+    min-width: 260px;
+    cursor: pointer;
+  }
+
+  .mentor-dropdown:focus {
+    border-color: #D4AF37;
+  }
+
+  /* Step 2: 14-Day Visual Date Strip */
+  .date-strip-wrap {
+    margin-bottom: 2rem;
+  }
+
+  .date-strip {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.75rem;
+    scroll-behavior: smooth;
+  }
+
+  .date-strip::-webkit-scrollbar {
+    height: 6px;
+  }
+  .date-strip::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+  }
+
+  .date-card {
+    min-width: 90px;
+    padding: 1rem 0.65rem;
+    border-radius: 14px;
+    background: #07090E;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    flex-shrink: 0;
+  }
+
+  .date-card:hover {
+    border-color: rgba(212, 175, 55, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .date-card.active {
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.15) 0%, rgba(14, 19, 31, 0.95) 100%);
+    border-color: #D4AF37;
+    box-shadow: 0 6px 18px rgba(212, 175, 55, 0.25);
+  }
+
+  .date-day-name {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #94A3B8;
+  }
+
+  .date-card.active .date-day-name {
+    color: #F5E096;
+  }
+
+  .date-day-num {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: #FFFFFF;
+    margin: 0.2rem 0;
+  }
+
+  .date-badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #94A3B8;
+  }
+
+  .date-badge.has-slots {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34D399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .date-badge.none {
+    background: rgba(255, 255, 255, 0.04);
+    color: #64748B;
+  }
+
+  /* Step 3: Available Session Cards */
+  .sessions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1rem;
+  }
+
+  .session-card {
+    background: #07090E;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.25rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .session-card:hover {
+    border-color: rgba(212, 175, 55, 0.35);
+    transform: translateY(-2px);
+  }
+
+  .session-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .mentor-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 850;
+    color: #D4AF37;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+  }
+
+  .mentor-name {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0;
+  }
+
+  .session-topic {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #E2E8F0;
+    line-height: 1.4;
+    margin: 0.35rem 0 0.5rem;
+  }
+
+  .session-meta-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .meta-pill {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #94A3B8;
+  }
+
+  .time-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 8px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    color: #F5E096;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Capacity Meter */
+  .capacity-meter-wrap {
+    margin-top: 0.5rem;
+  }
+
+  .capacity-text-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #94A3B8;
+    margin-bottom: 0.3rem;
+  }
+
+  .meter-bar-bg {
+    width: 100%;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .meter-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  .meter-bar-fill.green { background: #10B981; }
+  .meter-bar-fill.amber { background: #F59E0B; }
+  .meter-bar-fill.red   { background: #F43F5E; }
+
+  /* Booking Action Buttons */
+  .btn-reserve {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #D4AF37 0%, #F5E096 100%);
+    color: #07090E;
+    font-size: 0.85rem;
+    font-weight: 850;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
+    transition: all 0.15s ease;
+  }
+
+  .btn-reserve:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+  }
+
+  .btn-reserved-active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #34D399;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .btn-full {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #64748B;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: not-allowed;
+  }
+
+  /* 3. My Scheduled Sessions Section */
+  .bookings-card {
+    background: #0E131F;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  }
+
+  .booking-item-row {
+    padding: 1.35rem 1.5rem;
+    background: #07090E;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    transition: border-color 0.15s ease;
+  }
+
+  .booking-item-row:hover {
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+
+  .booking-info-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .booking-check-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #34D399;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  .btn-join-meet {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.35rem;
+    border-radius: 10px;
+    background: #10B981;
+    color: #022C22;
+    font-size: 0.8125rem;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    transition: background 0.15s ease;
+    white-space: nowrap;
+  }
+  .btn-join-meet:hover {
+    background: #34D399;
+  }
+
+  .btn-cal-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.65rem 1.15rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #F8FAFC;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .btn-cal-add:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #D4AF37;
+  }
+
+  .btn-cancel-seat {
+    background: transparent;
+    border: 1px solid rgba(244, 63, 94, 0.3);
+    color: #FB7185;
+    padding: 0.65rem 1rem;
+    border-radius: 10px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-cancel-seat:hover {
+    background: rgba(244, 63, 94, 0.15);
+  }
+
+  /* Responsive */
+  @media (max-width: 860px) {
+    .mentor-hero {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1.5rem;
+    }
+    .mentor-hours-card {
+      width: 100%;
+    }
+    .booking-item-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  .sessions-grid [hidden] { display: none !important; }
+  .mentor-booking-actions { display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap; }
+  .mentor-reservation { margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.12); padding: 1rem 0; }
+  .mentor-question { display: grid; gap: 0.5rem; justify-items: start; margin-top: 0.75rem; }
+  .mentor-question textarea, #mentorBookingDate {
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: #0b1020;
+    color: #fff;
+    padding: 0.5rem 0.75rem;
+  }
+  .mentor-question textarea { width: min(100%, 44rem); }
+  .mentor-shared-note { white-space: pre-wrap; }
+  .booking-status:not(:empty) { margin: 0.5rem 0; }
+  .session-card meter { width: 100%; }
+</style>
+</head>
+<body class="pg-session-booking has-sidebar">
+{% set active_page = 'sessions' %}
+{% include '_intern_sidebar.html' %}
+
+<!-- Main layout wrapper ensures strict 240px sidebar clearance -->
+<div class="main" id="main-content">
+  <div class="content">
+    <div class="booking-container">
+      
+      <!-- 1. HERO BANNER -->
+      <div class="mentor-hero">
+        <div>
+          <div class="mentor-hero-pill">
+            <i class="fa-solid fa-users-viewfinder"></i> Cohort Mentorship & Technical Advisory
+          </div>
+          <h1 class="mentor-hero-title">
+            1-on-1 & Group Mentor Guidance Sessions
+          </h1>
+          <p class="mentor-hero-desc">
+            Reserve your seat in expert-led technical architecture reviews, codebase walkthroughs, and capstone mentorship sessions (Up to 30 cohort seats per session).
+          </p>
+        </div>
+
+        <div class="mentor-hours-card">
+          <span class="hours-label">Daily Available Window</span>
+          <div class="hours-val">
+            <i class="fa-regular fa-clock" style="font-size:1.15rem; color:#D4AF37;"></i> 14:00 – 20:15
+          </div>
+          <span class="hours-sub">IST (Indian Standard Time)</span>
+        </div>
+      </div>
+
+      <div class="booking-console-card">
+        <div class="filter-bar-group">
+          <div>
+            <h2 class="step-title">Choose a track and mentor</h2>
+            <div class="domain-pills-row" id="domainPills" role="group" aria-label="Session track">
+              {% for domain in ['All Tracks'] + domains %}
+              <button type="button" class="domain-pill{% if domain == intern_domain %} active{% endif %}"
+                      data-domain="{{ domain }}" aria-pressed="{{ 'true' if domain == intern_domain else 'false' }}">
+                {{ domain }}
+              </button>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="mentor-selector-row">
+            <label class="mentor-select-label" for="mentorSelect">Mentor</label>
+            <select class="mentor-dropdown" id="mentorSelect">
+              <option value="all">All mentors</option>
+              {% for mentor in mentors %}
+              <option value="{{ mentor.id }}">{{ mentor.name }} ({{ mentor.upcoming_count }})</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="date-strip-wrap">
+          <h2 class="step-title">Choose a session date</h2>
+          <p class="mentor-hero-desc">Session dates follow IST. The times below use your device timezone.</p>
+          <div class="date-strip" id="dateStrip" data-today="{{ calendar_today }}" role="group" aria-label="Next fourteen days"></div>
+          <label for="mentorBookingDate">Session date (IST)</label>
+          <input type="date" id="mentorBookingDate" min="{{ calendar_today }}" value="{{ calendar_today }}">
+        </div>
+
+        <h2 class="step-title" id="step3Title">Upcoming sessions</h2>
+        <p id="bookingStatus" class="booking-status" role="status"></p>
+        <div class="sessions-grid" id="sessionsGrid">
+          {% for slot in available_slots %}
+          {% set seats_left = [slot.capacity - slot.seats_booked, 0]|max %}
+          <article class="session-card" data-session-card data-date="{{ slot.booking_date }}"
+                   data-domain="{{ slot.domain }}" data-mentor="{{ slot.mentor_id }}" data-seats="{{ seats_left }}">
+            <div>
+              <div class="session-card-header">
+                <div class="mentor-avatar" aria-hidden="true">{{ slot.mentor_name[:1]|upper }}</div>
+                <div>
+                  <h3 class="session-topic">{{ slot.topic }}</h3>
+                  <p class="mentor-name">{{ slot.mentor_name }}</p>
+                </div>
+              </div>
+              <p class="meta-pill">{{ slot.domain }}</p>
+              <div class="time-badge">
+                <time datetime="{{ slot.start_iso }}" data-mentor-time>{{ slot.start_time }} IST</time>
+                &ndash; <time datetime="{{ slot.end_iso }}" data-mentor-time>{{ slot.end_time }} IST</time>
+              </div>
+            </div>
+            <div>
+              <p>{{ slot.seats_booked }} / {{ slot.capacity }} seats reserved</p>
+              <meter min="0" max="{{ slot.capacity }}" value="{{ [slot.seats_booked, slot.capacity]|min }}" aria-label="Seats reserved"></meter>
+              {% if slot.is_my_booking %}
+              <p class="btn-reserved-active">Seat reserved</p>
+              {% elif seats_left == 0 %}
+              <p class="btn-full">Session full</p>
+              {% else %}
+              <button type="button" class="btn-reserve" data-reservation-action="book" data-slot-id="{{ slot.id }}"
+                      data-endpoint="{{ url_for('mentor.intern_book_slot', slot_id=slot.id) }}">Reserve seat</button>
+              {% endif %}
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+        <p id="mentorNoSessions"{% if available_slots %} hidden{% endif %}>No sessions match this date and these filters.</p>
+      </div>
+
+      <section class="bookings-card" aria-labelledby="scheduledMentorship">
+        <h2 class="step-title" id="scheduledMentorship">My scheduled sessions</h2>
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+          <p class="booking-status" role="{{ 'alert' if category == 'error' else 'status' }}">{{ message }}</p>
+        {% endfor %}
+        {% for booking in my_bookings %}
+          <article class="mentor-reservation" id="mentor-reservation-{{ booking.slot_id }}">
+            <div class="booking-item-row">
+              <div>
+                <h3>{{ booking.topic }} &middot; {{ booking.mentor_name }}</h3>
+                <p class="time-badge">
+                  <time datetime="{{ booking.start_iso }}" data-mentor-time>{{ booking.start_time }} IST</time>
+                  &ndash; <time datetime="{{ booking.end_iso }}" data-mentor-time>{{ booking.end_time }} IST</time>
+                </p>
+              </div>
+              <div class="mentor-booking-actions">
+                {% if booking.meeting_link %}
+                  <a href="{{ booking.meeting_link }}" target="_blank" rel="noopener noreferrer" class="btn-join-meet">Join meeting</a>
+                {% else %}
+                  <span>Meeting link pending</span>
+                {% endif %}
+                <a href="{{ url_for('mentor.intern_mentor_calendar', slot_id=booking.slot_id) }}" class="btn-cal-add">Download calendar event</a>
+                <button type="button" class="btn-cancel-seat" data-reservation-action="cancel" data-slot-id="{{ booking.slot_id }}"
+                        data-endpoint="{{ url_for('mentor.intern_cancel_slot', slot_id=booking.slot_id) }}">Cancel reservation</button>
+              </div>
+            </div>
+            <p class="booking-status" data-reservation-feedback role="status"></p>
+            {% if booking.agenda %}
+              <h4>Session agenda</h4>
+              <p class="mentor-shared-note">{{ booking.agenda }}</p>
+            {% endif %}
+            {% if booking.follow_up %}
+              <h4>Shared follow-up</h4>
+              <p class="mentor-shared-note">{{ booking.follow_up }}</p>
+            {% endif %}
+            <form class="mentor-question" method="post" action="{{ url_for('mentor.intern_mentor_question', slot_id=booking.slot_id) }}">
+              {{ csrf_field() }}
+              <label for="question-{{ booking.slot_id }}">Question for your mentor</label>
+              <textarea id="question-{{ booking.slot_id }}" name="question" rows="2" maxlength="600">{{ booking.question or '' }}</textarea>
+              <button type="submit" class="btn-cal-add">Save question</button>
+            </form>
+          </article>
+        {% else %}
+          <p>Reserve an upcoming session to see it here.</p>
+        {% endfor %}
+      </section>
+
+      {% if previous_bookings %}
+      <section class="bookings-card" aria-labelledby="pastMentorship">
+        <h2 class="step-title" id="pastMentorship">Previous sessions</h2>
+        {% for booking in previous_bookings %}
+          <article class="mentor-reservation">
+            <h3>{{ booking.topic }} &middot; {{ booking.mentor_name }}</h3>
+            <p><time datetime="{{ booking.start_iso }}" data-mentor-time>{{ booking.start_time }} IST</time></p>
+            {% if booking.follow_up %}
+              <h4>Shared follow-up</h4>
+              <p class="mentor-shared-note">{{ booking.follow_up }}</p>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </section>
+      {% endif %}
+    </div>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/mentor-booking.js') }}" defer></script>
+</body>
+</html>
