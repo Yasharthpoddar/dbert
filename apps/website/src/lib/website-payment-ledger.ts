@@ -1,4 +1,4 @@
-import db from '@/lib/db';
+import { getDb } from '@/lib/db';
 import {
   validateWebsiteCapture,
   WebsitePaymentError,
@@ -10,7 +10,7 @@ const orderFields = {
 } as const;
 
 export async function loadWebsiteOrder(orderId: string): Promise<WebsiteOrder> {
-  const candidates = await db.enrollmentInquiry.findMany({
+  const candidates = await getDb().enrollmentInquiry.findMany({
     where: { razorpayOrderId: orderId },
     select: orderFields,
     take: 2,
@@ -22,7 +22,7 @@ export async function loadWebsiteOrder(orderId: string): Promise<WebsiteOrder> {
 
 export async function reconcileWebsiteCapture(order: WebsiteOrder, paymentId: string, raw: unknown) {
   validateWebsiteCapture(order, paymentId, raw);
-  const settled = await db.enrollmentInquiry.updateMany({
+  const settled = await getDb().enrollmentInquiry.updateMany({
     where: {
       id: order.id, amount: order.amount, razorpayOrderId: order.razorpayOrderId,
       status: { in: ['payment_pending', 'failed'] }, razorpayPaymentId: null,
@@ -30,7 +30,7 @@ export async function reconcileWebsiteCapture(order: WebsiteOrder, paymentId: st
     data: { status: 'paid', razorpayPaymentId: paymentId },
   });
   if (settled.count === 1) return;
-  const latest = await db.enrollmentInquiry.findUnique({ where: { id: order.id }, select: orderFields });
+  const latest = await getDb().enrollmentInquiry.findUnique({ where: { id: order.id }, select: orderFields });
   if (latest?.status === 'paid' && latest.razorpayPaymentId === paymentId) return;
   throw new WebsitePaymentError('The order requires manual reconciliation.', 409);
 }

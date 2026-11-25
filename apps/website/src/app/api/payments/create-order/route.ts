@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { razorpay } from '@/lib/razorpay';
-import db from '@/lib/db';
+import { getDb } from '@/lib/db';
 import { signWebsitePayment, websiteProgramAmount, websiteReceiptPayload } from '@/lib/website-payment-contract';
 
 export async function POST(request: Request) {
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'The payment gateway returned an invalid order.' }, { status: 503 });
     }
 
-    const enrollment = await db.enrollmentInquiry.create({
+    const enrollment = await getDb().enrollmentInquiry.create({
       data: {
         name: name.trim(), email: email.trim().toLowerCase(), phone: phone.trim(),
         programName: programName.trim(), domain: domain?.trim() || null, amount: expected,

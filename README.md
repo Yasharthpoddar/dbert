@@ -57,7 +57,7 @@ npm ci
 npm run dev -- --hostname 127.0.0.1
 ```
 
-Open `http://127.0.0.1:3000`. For database-backed features, configure `DATABASE_URL` for a disposable local PostgreSQL database and initialize its schema with `npx prisma db push` from `apps/website`. Set `LMS_INTERNAL_URL=http://127.0.0.1:5000` to use the local portal for résumé scans.
+Open `http://127.0.0.1:3000`. Public pages can build without a database. For features that store form submissions or manage records, configure `DATABASE_URL` for a disposable PostgreSQL database and initialize its schema with `npx prisma db push` from `apps/website`. Set `LMS_INTERNAL_URL=http://127.0.0.1:5000` to use the local portal for résumé scans.
 
 ## Demo walkthrough
 
@@ -78,7 +78,7 @@ python -B scripts/verify_offline.py
 python -B scripts/verify_offline.py --browser
 ```
 
-The recorded offline run passed **130 Python tests, 4 Node tests, 8 Chromium tests, and SEO checks for 82 routes**. The portal checks use synthetic data and SQLite. The PostgreSQL startup path was checked with a simulated connection. Full Flask startup, the Next.js production build, and live PostgreSQL and Gemini still need verification in a configured environment.
+The recorded offline run passed **130 Python tests, 4 Node tests, 8 Chromium tests, and SEO checks for 82 routes**. The Next.js production build also passed with `DATABASE_URL` unset. The portal checks use synthetic data and SQLite, with a simulated PostgreSQL connection for startup checks. Full Flask startup and live PostgreSQL and Gemini still need verification in a configured environment.
 
 ## Implementation reports
 
